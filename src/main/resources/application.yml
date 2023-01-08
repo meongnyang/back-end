@@ -1,0 +1,19 @@
+spring:
+    h2:
+        console:
+            enabled: true
+            settings:
+                web-allow-others: true  # 추가
+
+    datasource:
+        url: jdbc:h2:~/meongnyang
+        username: sa
+        password:
+        driver-class-name: org.h2.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                format_sql: true
