@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Conimal {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "conimalId")
     private Long id;
 
@@ -28,14 +28,12 @@ public class Conimal {
     @NotNull
     private Long sex;
 
-    private Date birth;
+    private String birth;
 
     @NotNull
-    private Date adopt;
+    private String adopt;
 
     private String img;
-
-    private Long neutering;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")

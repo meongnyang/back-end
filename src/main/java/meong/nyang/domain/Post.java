@@ -2,6 +2,7 @@ package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "postId")
     private Long id;
 
@@ -35,7 +36,7 @@ public class Post {
     private String contents;
 
     @NotNull
-    private Date date;
+    private String date;
 
     private String img;
 
@@ -49,4 +50,16 @@ public class Post {
     @JoinColumn(name="memberId")
     private Member member;
 
+    @Builder
+    public Post(Long id, Long category, Long type, Long count, String title, String contents, String date, String img, Member member) {
+        this.id = id;
+        this.category = category;
+        this.type = type;
+        this.count = count;
+        this.title = title;
+        this.contents = contents;
+        this.date = date;
+        this.img = img;
+        this.member = member;
+    }
 }
