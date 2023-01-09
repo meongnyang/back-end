@@ -26,7 +26,7 @@ public class MemberServiceTest {
     @Test
     @Transactional
     @Rollback(value = false)
-    public void testMember() {
+    public void testMember(){
         //given
         Member member1 = new Member(1L, "wnstj1128@naver.com", "이월이", "1234", "wnstj1819");
         Member member2 = new Member(2L,"wnstj1819@naver.com","가을이","1234","wnstj7214");
