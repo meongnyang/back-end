@@ -1,6 +1,9 @@
 package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Qna {
     @Id
     @GeneratedValue
@@ -21,4 +26,5 @@ public class Qna {
 
     @NotNull
     private String answer;
+
 }

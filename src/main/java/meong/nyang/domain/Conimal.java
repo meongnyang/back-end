@@ -1,6 +1,9 @@
 package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Conimal {
     @Id
     @GeneratedValue
@@ -39,4 +44,5 @@ public class Conimal {
 
     @OneToMany(mappedBy = "conimal", cascade = CascadeType.ALL)
     private List<Record> recordList = new ArrayList<>();
+
 }

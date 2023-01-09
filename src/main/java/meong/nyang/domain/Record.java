@@ -1,11 +1,16 @@
 package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Record {
     @Id
     @GeneratedValue
@@ -37,4 +42,5 @@ public class Record {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="conimalId")
     private Conimal conimal;
+
 }
