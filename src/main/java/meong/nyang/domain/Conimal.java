@@ -35,6 +35,8 @@ public class Conimal {
 
     private String img;
 
+    private Long neutering;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")
     private Member member;
