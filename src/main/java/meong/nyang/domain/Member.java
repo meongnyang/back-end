@@ -1,10 +1,7 @@
 package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,5 +53,14 @@ public class Member {
         this.nickname = nickname;
         this.img = img;
         this.posts = posts;
+    }
+
+    @Builder
+    public Member(Long id, String email, String nickname, String img, String password) {
+        this.id = id;
+        this.email = email;
+        this.nickname = nickname;
+        this.img = img;
+        this.password = password;
     }
 }
