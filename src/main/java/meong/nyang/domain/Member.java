@@ -2,6 +2,8 @@ package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,8 @@ public class Member {
     @NotNull
     private String nickname;
 
+    @NotNull
+    @ColumnDefault("'http://localhost/image/image.png'")
     private String img;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -46,21 +51,18 @@ public class Member {
     private List<Record> records = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String password, String email, String nickname, String img, List<Post> posts) {
-        this.id = id;
+    public Member(String password, String email, String nickname) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
-        this.img = img;
-        this.posts = posts;
     }
 
     @Builder
-    public Member(Long id, String email, String nickname, String img, String password) {
-        this.id = id;
-        this.email = email;
-        this.nickname = nickname;
-        this.img = img;
-        this.password = password;
+    public static Member toEntity(String password, String email, String nickname){
+        return Member.builder()
+                .password(password)
+                .email(email)
+                .nickname(nickname)
+                .build();
     }
 }
