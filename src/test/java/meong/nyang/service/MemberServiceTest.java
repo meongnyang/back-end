@@ -1,7 +1,7 @@
 package meong.nyang.service;
 
 import meong.nyang.domain.Member;
-import meong.nyang.dto.MemberDto;
+import meong.nyang.dto.MemberRequestDto;
 import meong.nyang.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -28,16 +28,22 @@ public class MemberServiceTest {
     @Rollback(value = false)
     public void testMember(){
         //given
-        Member member1 = new Member(1L, "wnstj1128@naver.com", "이월이", "1234", "wnstj1819");
-        Member member2 = new Member(2L,"wnstj1819@naver.com","가을이","1234","wnstj7214");
+        MemberRequestDto member1 = MemberRequestDto.builder()
+                .password("1234")
+                .nickname("만두온닝")
+                .email("jung_j_yeon@naver.com")
+                .build();
+        MemberRequestDto member2 = MemberRequestDto.builder()
+                .password("1234")
+                .nickname("만두온닝")
+                .email("jung_j_yeon@gmail.com")
+                .build();
         //when
-        memberService.createMember(MemberDto.of(member1));
-        memberService.createMember(MemberDto.of(member2));
-
-        Member findMember = memberRepository.findMemberByEmail("wnstj1128@naver.com");
-
+        Long memberId1 = memberService.createMember(member1);
+        Long memberId2 = memberService.createMember(member2);
+        Member findMember = memberRepository.findMemberByEmail("jung_j_yeon@naver.com");
         //then
-        Assertions.assertThat(member1.getId()).isEqualTo(findMember.getId());
         Assertions.assertThat(member1.getEmail()).isEqualTo(findMember.getEmail());
+        Assertions.assertThat(memberId1).isEqualTo(findMember.getId());
     }
 }
