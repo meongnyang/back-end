@@ -11,9 +11,7 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,31 +31,23 @@ public class PostTest {
         Date nowDate = new Date();
         SimpleDateFormat Today = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         Member member = Member.builder()
-                .id(1L)
                 .password(null)
                 .nickname("만두냠")
                 .email("jung_j_yeon@naver.com")
-                .img(null)
                 .build();
         Post post1 = Post.builder()
-                .id(1L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
         Post post2 = Post.builder()
-                .id(2L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!!!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해 라뷰라뷰류")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
@@ -78,31 +68,23 @@ public class PostTest {
         Date nowDate = new Date();
         SimpleDateFormat Today = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         Member member = Member.builder()
-                .id(1L)
                 .password(null)
                 .nickname("만두냠")
                 .email("jung_j_yeon@naver.com")
-                .img(null)
                 .build();
         Post post1 = Post.builder()
-                .id(1L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
         Post post2 = Post.builder()
-                .id(2L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!!!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해 라뷰라뷰류")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
@@ -120,31 +102,23 @@ public class PostTest {
         Date nowDate = new Date();
         SimpleDateFormat Today = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         Member member = Member.builder()
-                .id(1L)
                 .password(null)
                 .nickname("만두냠")
                 .email("jung_j_yeon@naver.com")
-                .img(null)
                 .build();
         Post post1 = Post.builder()
-                .id(1L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
         Post post2 = Post.builder()
-                .id(2L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!!!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해 라뷰라뷰류")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
@@ -163,31 +137,23 @@ public class PostTest {
         Date nowDate = new Date();
         SimpleDateFormat Today = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         Member member = Member.builder()
-                .id(1L)
                 .password(null)
                 .nickname("만두냠")
                 .email("jung_j_yeon@naver.com")
-                .img(null)
                 .build();
         Post post1 = Post.builder()
-                .id(1L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
         Post post2 = Post.builder()
-                .id(2L)
                 .type(1L)
                 .category(1L)
-                .count(0L)
                 .title("울 귀여운 만둥이 보고가세요!!!")
                 .contents("웅냥냥 우리 귀여운 만두 너무너무 귀엽죠 우리집 내새끼 사랑해 라뷰라뷰류")
-                .date(Today.format(nowDate).toString())
                 .img(null)
                 .member(member)
                 .build();
