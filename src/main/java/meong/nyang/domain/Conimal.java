@@ -33,7 +33,7 @@ public class Conimal {
     @NotNull
     private String adopt;
 
-    private String img;
+    private String img = "'http://localhost/image/image.png'";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")
