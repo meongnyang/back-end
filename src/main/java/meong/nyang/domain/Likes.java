@@ -1,6 +1,7 @@
 package meong.nyang.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,17 @@ public class Likes {
     @JoinColumn(name="postId")
     private Post post;
 
+    @Builder
+    public Likes(Member member, Post post) {
+        this.member = member;
+        this.post = post;
+    }
+
+    @Builder
+    public static Likes toEntity(Member member, Post post) {
+        return Likes.builder()
+                .member(member)
+                .post(post)
+                .build();
+    }
 }
