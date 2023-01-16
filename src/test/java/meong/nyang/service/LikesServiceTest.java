@@ -52,17 +52,15 @@ public class LikesServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId1)
                 .build();
-        Long postId1 = postService.createPost(post1);
+        Long postId1 = postService.createPost(post1, memberId1);
         PostRequestDto post2 = PostRequestDto.builder()
                 .type(1L)
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId2)
                 .build();
-        Long postId2 = postService.createPost(post2);
+        Long postId2 = postService.createPost(post2, memberId2);
         LikesRequestDto likes1 = LikesRequestDto.builder()
                 .memberId(memberId1)
                 .postId(postId1)
@@ -109,17 +107,15 @@ public class LikesServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId1)
                 .build();
-        Long postId1 = postService.createPost(post1);
+        Long postId1 = postService.createPost(post1, memberId1);
         PostRequestDto post2 = PostRequestDto.builder()
                 .type(1L)
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId2)
                 .build();
-        Long postId2 = postService.createPost(post2);
+        Long postId2 = postService.createPost(post2, memberId2);
         LikesRequestDto likes1 = LikesRequestDto.builder()
                 .memberId(memberId1)
                 .postId(postId1)
