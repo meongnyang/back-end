@@ -1,6 +1,5 @@
 package meong.nyang.service;
 
-import meong.nyang.dto.LikesRequestDto;
 import meong.nyang.dto.MemberRequestDto;
 import meong.nyang.dto.PostRequestDto;
 import org.junit.Test;
@@ -24,7 +23,7 @@ public class LikesServiceTest {
     @Autowired
     PostService postService;
     @Autowired
-    LikesService  likesService;
+    LikesService likesService;
 
     @Test
     public void 좋아요누르기() throws Exception {
@@ -61,24 +60,12 @@ public class LikesServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         Long postId2 = postService.createPost(post2, memberId2);
-        LikesRequestDto likes1 = LikesRequestDto.builder()
-                .memberId(memberId1)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes2 = LikesRequestDto.builder()
-                .memberId(memberId2)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes3 = LikesRequestDto.builder()
-                .memberId(memberId3)
-                .postId(postId1)
-                .build();
         //when
-        likesService.postLike(likes1);
-        likesService.postLike(likes2);
-        likesService.postLike(likes3);
+        likesService.postLike(memberId1, postId1);
+        likesService.postLike(memberId2, postId1);
+        likesService.postLike(memberId3, postId1);
         //then
-        assertThat(postService.findByLikesByPost(postId1)).isEqualTo(3L);
+        assertThat(likesService.findByLikesByPost(postId1)).isEqualTo(3L);
     }
 
     @Test
@@ -116,24 +103,12 @@ public class LikesServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         Long postId2 = postService.createPost(post2, memberId2);
-        LikesRequestDto likes1 = LikesRequestDto.builder()
-                .memberId(memberId1)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes2 = LikesRequestDto.builder()
-                .memberId(memberId2)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes3 = LikesRequestDto.builder()
-                .memberId(memberId3)
-                .postId(postId1)
-                .build();
         //when
-        likesService.postLike(likes1);
-        likesService.postLike(likes2);
-        likesService.postLike(likes3);
-        likesService.postLike(likes3);
+        likesService.postLike(memberId1, postId1);
+        likesService.postLike(memberId2, postId1);
+        likesService.postLike(memberId3,postId1);
+        likesService.postLike(memberId3, postId1);
         //then
-        assertThat(postService.findByLikesByPost(postId1)).isEqualTo(2L);
+        assertThat(likesService.findByLikesByPost(postId1)).isEqualTo(2L);
     }
 }
