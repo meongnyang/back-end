@@ -27,16 +27,16 @@ public class CommentService {
 
     //댓글 생성
     @Transactional
-    public Long createComment(CommentRequestDto commentDto) {
-        Post post = postRepository.findById(commentDto.getPostId()).get();
-        Member member = memberRepository.findById(commentDto.getMemberId()).get();
+    public Long createComment(CommentRequestDto commentDto, Long memberId, Long postId) {
+        Post post = postRepository.findById(postId).get();
+        Member member = memberRepository.findById(memberId).get();
         Comment comment = commentRepository.save(Comment.toEntity(commentDto.getContents(), member, post));
         return comment.getId();
     }
 
     //댓글 수정
     @Transactional
-    public Long updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public Long updateComment(CommentRequestDto commentRequestDto, Long commentId) {
         Comment comment = commentRepository.findCommentById(commentId);
         comment.update(commentRequestDto.getContents());
         return comment.getId();
