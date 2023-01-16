@@ -63,13 +63,6 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    //특정 게시글의 좋아요 개수 조회
-    @Transactional(readOnly = true)
-    public Long findByLikesByPost(Long postId) {
-        Post post = postRepository.findById(postId).get();
-        return post.getCount();
-    }
-
     //오늘 날짜에 좋아요 수가 제일 많은 [1일 1자랑] 게시글 return
     @Transactional(readOnly = true)
     public List<PostResponseDto> findBestPostByDate() {

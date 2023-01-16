@@ -3,7 +3,6 @@ import lombok.RequiredArgsConstructor;
 import meong.nyang.domain.Likes;
 import meong.nyang.domain.Member;
 import meong.nyang.domain.Post;
-import meong.nyang.dto.LikesRequestDto;
 import meong.nyang.repository.LikesRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.PostRepository;
@@ -21,9 +20,9 @@ public class LikesService {
 
     //좋아요(정보가 있으면 삭제, 정보가 없으면 생성)
     @Transactional
-    public void postLike(LikesRequestDto likesRequestDto) {
-        Member member = memberRepository.findById(likesRequestDto.getMemberId()).get();
-        Post post = postRepository.findById(likesRequestDto.getPostId()).get();
+    public void postLike(Long memberId, Long postId) {
+        Member member = memberRepository.findById(memberId).get();
+        Post post = postRepository.findById(postId).get();
         Optional<Likes> likes = likesRepository.findLikesByMemberIdAndPostId(member.getId(), post.getId());
         likes.ifPresentOrElse(
                 //좋아요를 이미 누른 경우 삭제
@@ -37,5 +36,12 @@ public class LikesService {
                     post.updateLikes(post.getCount()+1L);
                 }
         );
+    }
+
+    //특정 게시글의 좋아요 개수 조회
+    @Transactional(readOnly = true)
+    public Long findByLikesByPost(Long postId) {
+        Post post = postRepository.findById(postId).get();
+        return post.getCount();
     }
 }
