@@ -55,18 +55,14 @@ public class CommentServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         CommentRequestDto comment1 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId1)
                 .contents("우왕 만두가정말정말 귀엽고 사랑스러운걸요???")
                 .build();
         CommentRequestDto comment2 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId2)
                 .contents("웅냥냥 만두 너무 귀여워요 쏘 카와이")
                 .build();
         //when
-        Long commentId1 = commentService.createComment(comment1);
-        Long commentId2 = commentService.createComment(comment2);
+        Long commentId1 = commentService.createComment(comment1, memberId1, postId1);
+        Long commentId2 = commentService.createComment(comment2, memberId2, postId1);
         //then
         assertThat(commentService.findCommentsByPostId(postId1).size()).isEqualTo(2L);
     }
@@ -100,24 +96,18 @@ public class CommentServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         CommentRequestDto comment1 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId1)
                 .contents("우왕 만두가정말정말 귀엽고 사랑스러운걸요???")
                 .build();
         CommentRequestDto comment2 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId2)
                 .contents("웅냥냥 만두 너무 귀여워요 쏘 카와이")
                 .build();
-        Long commentId1 = commentService.createComment(comment1);
-        Long commentId2 = commentService.createComment(comment2);
+        Long commentId1 = commentService.createComment(comment1, memberId1, postId1);
+        Long commentId2 = commentService.createComment(comment2, memberId2, postId1);
         //when
         CommentRequestDto comment3 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId1)
                 .contents("이거슨 수정된 댓글이에용")
                 .build();
-        commentService.updateComment(commentId2, comment3);
+        commentService.updateComment(comment3, commentId2);
         //then
         assertThat(commentService.findCommentsByCommentsId(commentId2).getContents()).isEqualTo("이거슨 수정된 댓글이에용");
     }
@@ -152,17 +142,13 @@ public class CommentServiceTest {
                 .build();
         Long postId2 = postService.createPost(post2, memberId2);
         CommentRequestDto comment1 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId1)
                 .contents("우왕 만두가정말정말 귀엽고 사랑스러운걸요???")
                 .build();
         CommentRequestDto comment2 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId2)
                 .contents("웅냥냥 만두 너무 귀여워요 쏘 카와이")
                 .build();
-        Long commentId1 = commentService.createComment(comment1);
-        Long commentId2 = commentService.createComment(comment2);
+        Long commentId1 = commentService.createComment(comment1, memberId1, postId1);
+        Long commentId2 = commentService.createComment(comment2, memberId2, postId2);
         //when
         commentService.deleteComment(commentId1);
         //then
@@ -199,24 +185,18 @@ public class CommentServiceTest {
         Long postId1 = postService.createPost(post1, memberId1);
         Long postId2 = postService.createPost(post2, memberId2);
         CommentRequestDto comment1 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId1)
                 .contents("우왕 만두가정말정말 귀엽고 사랑스러운걸요???")
                 .build();
         CommentRequestDto comment2 = CommentRequestDto.builder()
-                .postId(postId1)
-                .memberId(memberId2)
                 .contents("웅냥냥 만두 너무 귀여워요 쏘 카와이")
                 .build();
         CommentRequestDto comment3 = CommentRequestDto.builder()
-                .postId(postId2)
-                .memberId(memberId2)
                 .contents("웅냥냥 만두 너무 귀여워요 쏘 카와이")
                 .build();
         //when
-        Long commentId1 = commentService.createComment(comment1);
-        Long commentId2 = commentService.createComment(comment2);
-        Long commentId3 = commentService.createComment(comment3);
+        Long commentId1 = commentService.createComment(comment1,memberId1, postId1);
+        Long commentId2 = commentService.createComment(comment2, memberId2, postId1);
+        Long commentId3 = commentService.createComment(comment3, memberId2, postId2);
         //then
         assertThat(commentService.findCommentsByPostId(postId1).size()).isEqualTo(2);
         assertThat(commentService.findCommentsByPostId(postId2).size()).isEqualTo(1);

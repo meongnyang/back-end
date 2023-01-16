@@ -1,6 +1,5 @@
 package meong.nyang.service;
 
-import meong.nyang.dto.LikesRequestDto;
 import meong.nyang.dto.MemberRequestDto;
 import meong.nyang.dto.PostRequestDto;
 import meong.nyang.dto.PostResponseDto;
@@ -192,36 +191,12 @@ public class PostServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         Long postId4 = postService.createPost(post4, memberId2);
-        LikesRequestDto likes1 = LikesRequestDto.builder()
-                .memberId(memberId1)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes2 = LikesRequestDto.builder()
-                .memberId(memberId2)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes3 = LikesRequestDto.builder()
-                .memberId(memberId3)
-                .postId(postId1)
-                .build();
-        LikesRequestDto likes4 = LikesRequestDto.builder()
-                .memberId(memberId3)
-                .postId(postId2)
-                .build();
-        LikesRequestDto likes5 = LikesRequestDto.builder()
-                .memberId(memberId3)
-                .postId(postId3)
-                .build();
-        LikesRequestDto likes6 = LikesRequestDto.builder()
-                .memberId(memberId1)
-                .postId(postId3)
-                .build();
-        likesService.postLike(likes1);
-        likesService.postLike(likes2);
-        likesService.postLike(likes3);
-        likesService.postLike(likes4);
-        likesService.postLike(likes5);
-        likesService.postLike(likes6);
+        likesService.postLike(memberId1, postId1);
+        likesService.postLike(memberId2, postId1);
+        likesService.postLike(memberId3, postId1);
+        likesService.postLike(memberId3, postId2);
+        likesService.postLike(memberId3, postId3);
+        likesService.postLike(memberId1, postId3);
         //when
         List<PostResponseDto> postResponseDto = postService.findBestPostByDate();
         //then
