@@ -9,13 +9,13 @@ import meong.nyang.domain.Post;
 public class CommentResponseDto {
     private Long commentId;
     private String contents;
-    private Member member;
-    private Post post;
+    private Long memberId;
+    private Long postId;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.contents = comment.getContents();
-        this.member = comment.getMember();
-        this.post = comment.getPost();
+        this.memberId = comment.getMember().getId();
+        this.postId = comment.getPost().getId();
     }
 }
