@@ -12,9 +12,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,10 +42,9 @@ public class PostServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId)
                 .build();
         //when
-        Long postId = postService.createPost(post);
+        Long postId = postService.createPost(post, memberId);
         //then
         PostResponseDto p = postService.findPostByPostId(postId);
         assertThat(postId).isEqualTo(p.getPostId());
@@ -68,26 +64,23 @@ public class PostServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId)
                 .build();
         PostRequestDto post2 = PostRequestDto.builder()
                 .type(2L)
                 .title("울 귀여운 만두 보고가세용용~!~!")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요ㅋㅋㅋ나의사랑정만두")
-                .memberId(memberId)
                 .build();
-        Long post1Id = postService.createPost(post1);
-        Long post2Id = postService.createPost(post2);
+        Long post1Id = postService.createPost(post1, memberId);
+        Long post2Id = postService.createPost(post2, memberId);
         //when
         PostRequestDto post3 = PostRequestDto.builder()
                 .type(2L)
                 .title("귀여운 울 만듀 보고가세용")
                 .category(1L)
                 .contents("히히히히히히히히히")
-                .memberId(memberId)
                 .build();
-        postService.updatePost(post2Id, post3);
+        postService.updatePost(post3, post2Id);
         //then
         assertThat(post3.getTitle()).isEqualTo("귀여운 울 만듀 보고가세용");
     }
@@ -106,25 +99,22 @@ public class PostServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId)
                 .build();
         PostRequestDto post2 = PostRequestDto.builder()
                 .type(2L)
                 .title("울 귀여운 만두 보고가세용용~!~!")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요ㅋㅋㅋ나의사랑정만두")
-                .memberId(memberId)
                 .build();
         PostRequestDto post3 = PostRequestDto.builder()
                 .type(2L)
                 .title("엔티티티티 프레즐 프레즐~")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요ㅋㅋㅋ나의사랑정만두!!!!!")
-                .memberId(memberId)
                 .build();
-        Long post1Id = postService.createPost(post1);
-        Long post2Id = postService.createPost(post2);
-        Long post3Id = postService.createPost(post3);
+        Long post1Id = postService.createPost(post1, memberId);
+        Long post2Id = postService.createPost(post2, memberId);
+        Long post3Id = postService.createPost(post3, memberId);
         //when
         postService.deletePost(post1Id);
         //then
@@ -145,9 +135,8 @@ public class PostServiceTest {
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId)
                 .build();
-        Long post1Id = postService.createPost(post1);
+        Long post1Id = postService.createPost(post1, memberId);
         //when
         PostResponseDto p1 = postService.findPostByPostId(post1Id);
         //then
@@ -180,33 +169,29 @@ public class PostServiceTest {
                 .title("울 귀여운 만두 보고가세용용!! 이거슨 인기게시글이 될 글 멍멍이")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId1)
                 .build();
-        Long postId1 = postService.createPost(post1);
+        Long postId1 = postService.createPost(post1, memberId1);
         PostRequestDto post2 = PostRequestDto.builder()
                 .type(1L)
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId2)
                 .build();
-        Long postId2 = postService.createPost(post2);
+        Long postId2 = postService.createPost(post2, memberId2);
         PostRequestDto post3 = PostRequestDto.builder()
                 .type(2L)
                 .title("울 귀여운 만두 보고가세용용 이거슨 인기게시글이 될 글 고냥이")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId2)
                 .build();
-        Long postId3 = postService.createPost(post3);
+        Long postId3 = postService.createPost(post3, memberId2);
         PostRequestDto post4 = PostRequestDto.builder()
                 .type(2L)
                 .title("울 귀여운 만두 보고가세용용")
                 .category(1L)
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
-                .memberId(memberId2)
                 .build();
-        Long postId4 = postService.createPost(post4);
+        Long postId4 = postService.createPost(post4, memberId2);
         LikesRequestDto likes1 = LikesRequestDto.builder()
                 .memberId(memberId1)
                 .postId(postId1)
