@@ -50,10 +50,10 @@ public class PostController {
         return responseDto;
     }
 
-    //인기 아가들 정보 가져오기
-    @GetMapping("/posts/popular")
-    public List<PostResponseDto> findPopularPost() {
-        List<PostResponseDto> responseDtoList = postService.findBestPostByDate();
+    //[1일 1자랑] 강아지 게시글 가지고오기
+    @GetMapping("/posts/popular/{type}")
+    public PostResponseDto findPopularPost(@PathVariable Long type) {
+        PostResponseDto responseDtoList = postService.findBestPostByDate(type);
         return responseDtoList;
     }
 }

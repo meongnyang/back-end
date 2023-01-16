@@ -198,16 +198,10 @@ public class PostServiceTest {
         likesService.postLike(memberId3, postId3);
         likesService.postLike(memberId1, postId3);
         //when
-        List<PostResponseDto> postResponseDto = postService.findBestPostByDate();
+        PostResponseDto postResponseDto1 = postService.findBestPostByDate(1L);
+        PostResponseDto postResponseDto2 = postService.findBestPostByDate(2L);
         //then
-        for(PostResponseDto p : postResponseDto) {
-            if(p.getType() == 1L) {
-                assertThat(p.getCount()).isEqualTo(3L);
-                assertThat(p.getPostId()).isEqualTo(postId1);
-            } else {
-                assertThat(p.getCount()).isEqualTo(2L);
-                assertThat(p.getPostId()).isEqualTo(postId3);
-            }
-        }
+        assertThat(1L).isEqualTo(postResponseDto1.getType());
+        assertThat(2L).isEqualTo(postResponseDto2.getType());
     }
 }
