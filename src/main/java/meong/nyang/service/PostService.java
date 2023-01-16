@@ -65,25 +65,11 @@ public class PostService {
 
     //오늘 날짜에 좋아요 수가 제일 많은 [1일 1자랑] 게시글 return
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findBestPostByDate() {
+    public PostResponseDto findBestPostByDate(Long type) {
         String nowLocalDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        List<Post> posts = postRepository.findPostsByCreatedDateAndCategory(nowLocalDate, 3L);
-        List<Post> dogs = new ArrayList<Post>();
-        List<Post> cats = new ArrayList<Post>();
-        List<Post> TodayBestConimals = new ArrayList<Post>();
-        //해당 날짜의 모든 [1일 1자랑] 게시글 가져와서 강아지/고양이 분리해주기
-        for(Post post: posts) {
-            if(post.getType() == 1L) {
-                dogs.add(post);
-            } else if(post.getType() == 2L) {
-                cats.add(post);
-            }
-        }
-
-        //강아지 따로 고양이 따로 좋아요가 가장 많은 글 찾기
-        TodayBestConimals.add(dogs.stream().max(Comparator.comparingLong(Post::getCount)).get());
-        TodayBestConimals.add(cats.stream().max(Comparator.comparingLong(Post::getCount)).get());
-
-        return TodayBestConimals.stream().map(PostResponseDto::new).collect(Collectors.toList());
+        List<Post> posts = postRepository.findPostsByCreatedDateAndCategoryAndType(nowLocalDate, 3L, type);
+        //오늘 날짜의 좋아요가 가장 많은 글 찾기
+        Post bestPost = posts.stream().max(Comparator.comparingLong(Post::getCount)).get();
+        return new PostResponseDto(bestPost);
     }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findPostsByCreatedDateAndCategory(String currentDate, Long type);
+    List<Post> findPostsByCreatedDateAndCategoryAndType(String currentDate, Long category, Long type);
 }
