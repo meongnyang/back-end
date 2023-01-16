@@ -26,8 +26,8 @@ public class PostService {
 
     //게시글 작성
     @Transactional
-    public Long createPost(PostRequestDto postRequestDto) {
-        Member member = memberRepository.findById(postRequestDto.getMemberId()).get();
+    public Long createPost(PostRequestDto postRequestDto, Long memberId) {
+        Member member = memberRepository.findById(memberId).get();
         Post post = postRepository.save(Post.toEntity(postRequestDto.getCategory(), postRequestDto.getType(),
                 postRequestDto.getTitle(), postRequestDto.getContents(), postRequestDto.getImg(), member));
         return post.getId();
@@ -35,7 +35,7 @@ public class PostService {
 
     //게시글 수정
     @Transactional
-    public Long updatePost(Long postId, PostRequestDto postRequestDto) {
+    public Long updatePost(PostRequestDto postRequestDto, Long postId) {
         Post post = postRepository.findById(postId).get();
         post.update(postRequestDto.getCategory(), postRequestDto.getType(), postRequestDto.getTitle(),
                 postRequestDto.getContents(), postRequestDto.getImg());
@@ -74,7 +74,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostResponseDto> findBestPostByDate() {
         String nowLocalDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        List<Post> posts = postRepository.findPostsByCreatedDateAndCategory(nowLocalDate, 1L);
+        List<Post> posts = postRepository.findPostsByCreatedDateAndCategory(nowLocalDate, 3L);
         List<Post> dogs = new ArrayList<Post>();
         List<Post> cats = new ArrayList<Post>();
         List<Post> TodayBestConimals = new ArrayList<Post>();
