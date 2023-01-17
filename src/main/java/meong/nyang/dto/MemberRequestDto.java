@@ -11,10 +11,13 @@ public class MemberRequestDto {
     private String email;
     private String nickname;
 
+    private String img;
+
     @Builder
-    public MemberRequestDto(String password, String email, String nickname) {
+    public MemberRequestDto(String password, String email, String nickname, String img) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
+        this.img = img;
     }
 }

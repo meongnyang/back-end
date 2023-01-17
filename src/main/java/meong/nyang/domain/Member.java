@@ -65,4 +65,8 @@ public class Member {
                 .nickname(nickname)
                 .build();
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
