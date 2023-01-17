@@ -28,8 +28,6 @@ public class MemberService {
     //회원정보 수정 - 닉네임
     @Transactional
     public Long updateInfo(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
-        //validateDuplicateNickName(memberId);
-        //Optional<Member> findMember = memberRepository.findMemberById(memberId);
         Optional<Member> findMember = memberRepository.findMemberByNickname(memberRequestDto.getNickname());
         Member member = memberRepository.findMemberById(memberId);
         if (findMember.isPresent() && !findMember.equals(memberId)) {
@@ -40,11 +38,29 @@ public class MemberService {
         return member.getId();
     }
 
-
     @Transactional
     public MemberResponseDto findMemberByMemberId(Long memberId) {
         Member member = memberRepository.findMemberById(memberId);
         return new MemberResponseDto(member);
+    }
+
+    @Transactional
+    public Long updateImg(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
+        Member findMember = memberRepository.findMemberById(memberId);
+        findMember.updateImg(memberRequestDto.getImg());
+        return findMember.getId();
+    }
+
+    @Transactional
+    public Long deleteImg(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
+        Member findMember = memberRepository.findMemberById(memberId);
+        findMember.deletePhoto(memberRequestDto.getImg());
+        return findMember.getId();
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+       memberRepository.deleteById(memberId);
     }
 }
 

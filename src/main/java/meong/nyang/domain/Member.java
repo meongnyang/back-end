@@ -69,4 +69,12 @@ public class Member {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void updateImg(String img) {
+        this.img = img;
+    }
+
+    public void deletePhoto(String img) {
+        this.img = "'http://localhost/image/image.png'";
+    }
 }

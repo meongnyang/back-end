@@ -1,5 +1,6 @@
 package meong.nyang.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import meong.nyang.domain.Member;
@@ -31,7 +32,7 @@ public class MemberController {
             memberService.createMember(memberRequestDto);
             return new ResponseEntity<>(memberRequestDto, HttpStatus.CREATED);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -39,12 +40,35 @@ public class MemberController {
 
     @PatchMapping("/members/updateNickName/{memberId}")
     public MemberResponseDto updateNickName(@PathVariable Long memberId,
-                                            @RequestBody MemberRequestDto memberRequestDto
-            , Member member) throws Exception {
+                                            @RequestBody MemberRequestDto memberRequestDto, Member member) throws Exception {
         Long findMemberId = memberService.updateInfo(memberRequestDto, memberId);
         MemberResponseDto responseDto = memberService.findMemberByMemberId(findMemberId);
 
         return responseDto;
     }
+
+    //사진 수정
+    @PatchMapping("/members/updatePhoto/{membersId}")
+    public MemberResponseDto updateImg(@PathVariable Long membersId,
+                                       @RequestBody MemberRequestDto memberRequestDto) throws Exception {
+        if (memberRequestDto.getImg().length() != 0) {
+            Long findMemberId = memberService.updateImg(memberRequestDto, membersId);
+            MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
+            return memberResponseDto;
+        } else {
+            Long findMemberId = memberService.deleteImg(memberRequestDto, membersId);
+            MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
+            return memberResponseDto;
+        }
+
+    }
+
+    @DeleteMapping("members/{memberId}")
+    public void deleteUser (@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
+    }
 }
+
+
+
 
