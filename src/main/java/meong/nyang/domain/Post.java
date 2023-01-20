@@ -58,18 +58,6 @@ public class Post extends BaseEntity{
         this.member = member;
     }
 
-    @Builder
-    public static Post toEntity(Long category, Long type, String title, String contents, String img, Member member){
-        return Post.builder()
-                .category(category)
-                .type(type)
-                .title(title)
-                .contents(contents)
-                .img(img)
-                .member(member)
-                .build();
-    }
-
     public void update(Long category, Long type, String title, String contents, String img) {
         this.category = category;
         this.type = type;
