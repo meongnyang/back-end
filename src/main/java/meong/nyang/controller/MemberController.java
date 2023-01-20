@@ -1,18 +1,21 @@
 package meong.nyang.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import meong.nyang.domain.Member;
+import meong.nyang.dto.MemberLoginRequestDto;
 import meong.nyang.dto.MemberRequestDto;
 import meong.nyang.dto.MemberResponseDto;
+import meong.nyang.dto.TokenDto;
+import meong.nyang.jwt.TokenProvider;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Log4j2
@@ -21,6 +24,8 @@ import java.util.Optional;
 public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/members")
     public ResponseEntity<MemberRequestDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
@@ -64,8 +69,17 @@ public class MemberController {
     }
 
     @DeleteMapping("members/{memberId}")
-    public void deleteUser (@PathVariable Long memberId) {
+    public void deleteUser(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
+    }
+
+    //로그인
+    @PostMapping("/members/login")
+    public TokenDto login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        String email = memberLoginRequestDto.getEmail();
+        String password = memberLoginRequestDto.getPassword();
+        TokenDto tokenDto = memberService.login(email, password);
+        return tokenDto;
     }
 }
 
