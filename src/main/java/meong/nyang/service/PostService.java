@@ -28,7 +28,7 @@ public class PostService {
     @Transactional
     public Long createPost(PostRequestDto postRequestDto, Long memberId) {
         Member member = memberRepository.findById(memberId).get();
-        Post post = postRepository.save(Post.toEntity(postRequestDto.getCategory(), postRequestDto.getType(),
+        Post post = postRepository.save(postRequestDto.toEntity(postRequestDto.getCategory(), postRequestDto.getType(),
                 postRequestDto.getTitle(), postRequestDto.getContents(), postRequestDto.getImg(), member));
         return post.getId();
     }

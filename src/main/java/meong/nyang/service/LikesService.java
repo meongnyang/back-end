@@ -3,6 +3,7 @@ import lombok.RequiredArgsConstructor;
 import meong.nyang.domain.Likes;
 import meong.nyang.domain.Member;
 import meong.nyang.domain.Post;
+import meong.nyang.dto.LikesRequestDto;
 import meong.nyang.repository.LikesRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.PostRepository;
@@ -32,7 +33,7 @@ public class LikesService {
                 },
                 () -> {
                     //좋아요가 안눌린 경우 좋아요를 누름
-                    Likes likes1 = likesRepository.save(Likes.toEntity(member,post));
+                    Likes likes1 = likesRepository.save(LikesRequestDto.toEntity(member,post));
                     post.updateLikes(post.getCount()+1L);
                 }
         );

@@ -29,12 +29,4 @@ public class Likes {
         this.member = member;
         this.post = post;
     }
-
-    @Builder
-    public static Likes toEntity(Member member, Post post) {
-        return Likes.builder()
-                .member(member)
-                .post(post)
-                .build();
-    }
 }

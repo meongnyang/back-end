@@ -30,7 +30,7 @@ public class CommentService {
     public Long createComment(CommentRequestDto commentDto, Long memberId, Long postId) {
         Post post = postRepository.findById(postId).get();
         Member member = memberRepository.findById(memberId).get();
-        Comment comment = commentRepository.save(Comment.toEntity(commentDto.getContents(), member, post));
+        Comment comment = commentRepository.save(CommentRequestDto.toEntity(commentDto.getContents(), member, post));
         return comment.getId();
     }
 
