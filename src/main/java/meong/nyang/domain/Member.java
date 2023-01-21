@@ -3,25 +3,23 @@ package meong.nyang.domain;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Builder
+@Table(name="member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
 
-public class Member implements UserDetails {
+public class Member {
     @Id
+    @Column(name = "memberId", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberId")
     private Long id;
 
     private String password;
@@ -32,14 +30,18 @@ public class Member implements UserDetails {
     @NotNull
     private String nickname;
 
+    @Column(name = "activated")
+    private boolean activated;
+
+
     @NotNull
     @Builder.Default
     private String img = "http://localhost/image/image.png";
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
+/*    @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();*/
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Conimal> conimals = new ArrayList<>();
@@ -53,15 +55,15 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Species> species = new ArrayList<>();
+/*    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Species> species = new ArrayList<>();*/
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_authority",
+            name = "member_authority",
             joinColumns = {@JoinColumn(name = "memberId", referencedColumnName = "memberId")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
@@ -73,10 +75,10 @@ public class Member implements UserDetails {
         this.nickname = nickname;
     }
 
-    public static Member toEntity(String password, String email, String nickname) {
+  /*  public static Member toEntity(String password, String email, String nickname) {
         final Member member = new Member(password, email, nickname);
         return member;
-    }
+    }*/
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
@@ -90,42 +92,5 @@ public class Member implements UserDetails {
         this.img = "'http://localhost/image/image.png'";
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return authorities;
-   /*    return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());*/
 
-}
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

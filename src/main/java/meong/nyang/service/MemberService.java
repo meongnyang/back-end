@@ -1,28 +1,85 @@
 package meong.nyang.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import meong.nyang.controller.util.SecurityUtil;
+import meong.nyang.domain.Authority;
 import meong.nyang.domain.Member;
-import meong.nyang.dto.MemberRequestDto;
-import meong.nyang.dto.MemberResponseDto;
+import meong.nyang.dto.*;
+import meong.nyang.exception.DuplicateMemberException;
+import meong.nyang.exception.NotFoundMemberException;
+import meong.nyang.jwt.JwtFilter;
+import meong.nyang.jwt.TokenProvider;
 import meong.nyang.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
-    //회원가입
-   @Transactional
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+
+
+    @Transactional
+    public MemberRequestDto signUp(MemberRequestDto memberRequestDto) {
+        System.out.println(memberRequestDto.getEmail());
+        if (memberRepository.findOneWithAuthoritiesByEmail(memberRequestDto.getEmail()).orElse(null) != null) {
+            throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
+        }
+        System.out.println("22222222222");
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+        System.out.println(authority.getAuthorityName());
+
+        Member member = Member.builder()
+                .email(memberRequestDto.getEmail())
+                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
+                .nickname(memberRequestDto.getNickname())
+                .authorities(Collections.singleton(authority))
+                .activated(true)
+                .build();
+        System.out.println(authority.toString());
+        System.out.println(member.getId());
+
+        return memberRequestDto.from(memberRepository.save(member));
+    }
+
+    //email을 parameter로 받아서 어떠한 username이던 username에 해당하는 정보를 가져올 수 있다
+    @Transactional(readOnly = true)
+    public MemberRequestDto getUserWithAuthorities(String email) {
+        return MemberRequestDto.from(memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null));
+    }
+    //security context에 저장된 user만
+    @Transactional(readOnly = true)
+    public MemberRequestDto getMyUserWithAuthorities() {
+        return MemberRequestDto.from(
+                SecurityUtil.getCurrentUsername()
+                        .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
+                        .orElseThrow(() -> new NotFoundMemberException("Member not found"))
+        );
+    }
+/*   @Transactional
     public Long createMember(MemberRequestDto memberRequestDto) throws IOException, Exception {
 
        //Authority authority = new Authority("ROLE_USER");
@@ -30,25 +87,21 @@ public class MemberService {
       // System.out.println(authority.getAuthorityName());
 
 
-       Authority authority = Authority.builder()
-               .authorityName("ROLE_USER")
-               .build();
 
-       Member member = Member.toEntity(memberRequestDto.getPassword(), memberRequestDto.getEmail()
+   Member member = Member.toEntity(memberRequestDto.getPassword(), memberRequestDto.getEmail()
                 , memberRequestDto.getNickname() + authority);
 
-     /*  Member member = Member.builder()
+
+  Member member = Member.builder()
                         .nickname(memberRequestDto.getNickname())
                         .email(memberRequestDto.getEmail())
                         .password(passwordEncoder.encode(memberRequestDto.getPassword()))
                         .authorities(Collections.singleton(authority))
-                        .build();*/
+                        .build();
 
-       System.out.println(member.getAuthorities());
-       System.out.println("여ㅣ여깅겨이겨이거ㅣ여이겨ㅣㅇ겨");
-       memberRepository.save(member);
+
        return member.getId();
-    }
+    }*/
 
 
     //회원정보 수정 - 닉네임
@@ -86,8 +139,39 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long memberId) {
-       memberRepository.deleteById(memberId);
+        memberRepository.deleteById(memberId);
     }
+
+    public ResponseLoginMemberDto login(LoginDto loginDto) throws Exception {
+        Optional<Member> loginUser = memberRepository.findMemberByEmail(loginDto.getEmail());
+        if ((loginUser.orElse(null) == null) || !passwordEncoder.matches(loginDto.getPassword(), loginUser.get().getPassword())) {
+            throw new Exception("아이디와 비밀번호가 일치하지 않음");
+        } else {
+            Member member = loginUser.get();
+            TokenDto tokenDtoResponseEntity = getTokenDtoResponseEntity(loginDto);
+            return new ResponseLoginMemberDto(
+                    tokenDtoResponseEntity.getToken(),
+                    member.getId(),
+                    member.getNickname(),
+                    member.getEmail());
+        }
+    }
+
+    private TokenDto getTokenDtoResponseEntity(LoginDto loginDto) {
+        Member member = memberRepository.findByEmail(loginDto.getEmail());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getEmail(),member.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(member.getId(),authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new TokenDto(jwt);
+    }
+
 }
 
 

@@ -32,15 +32,6 @@ public class Comment {
         this.post = post;
     }
 
-    @Builder
-    public static Comment toEntity(String contents, Member member, Post post){
-        return Comment.builder()
-                .contents(contents)
-                .member(member)
-                .post(post)
-                .build();
-    }
-
     public void update(String contents) {
         this.contents = contents;
     }
