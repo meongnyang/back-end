@@ -16,15 +16,17 @@ public class MemberRequestDto {
     private String email;
     private String nickname;
     private String img;
-
+    private String roles;
     private Set<AuthorityDto> authorityDtoSet;
 
-    public MemberRequestDto(String password, String email, String nickname, String img, Long id) {
+    public MemberRequestDto(String password, String email, String nickname, String img, String roles) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.img = img;
+        this.roles = roles;
     }
+
 
 
     public static MemberRequestDto from(Member member) {

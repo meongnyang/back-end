@@ -7,7 +7,6 @@ import meong.nyang.dto.*;
 import meong.nyang.jwt.JwtFilter;
 import meong.nyang.jwt.TokenProvider;
 import meong.nyang.repository.MemberRepository;
-import meong.nyang.service.CustomUserDetailsService;
 import meong.nyang.service.MemberService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,7 @@ public class MemberController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
 
-/*   @PostMapping("/members")
+   @PostMapping("/members")
     public ResponseEntity<MemberRequestDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
         Optional<Member> findMember = memberRepository.findMemberByEmail(memberRequestDto.getEmail());
         try {
@@ -47,8 +46,8 @@ public class MemberController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-    }*/
-
+    }
+/*
     @GetMapping("/members")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity<MemberRequestDto> getMyUserInfo(HttpServletRequest request) {
@@ -61,7 +60,7 @@ public class MemberController {
             @Valid @RequestBody MemberRequestDto memberRequestDto
     ) {
         return ResponseEntity.ok(memberService.signUp(memberRequestDto));
-    }
+    }*/
 
     @PatchMapping("/members/updateNickName/{memberId}")
     public MemberResponseDto updateNickName(@PathVariable Long memberId,

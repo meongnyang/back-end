@@ -30,7 +30,7 @@ public class Member {
     @NotNull
     private String nickname;
 
-    @Column(name = "activated")
+    @Column(name ="activated")
     private boolean activated;
 
 
@@ -38,8 +38,8 @@ public class Member {
     @Builder.Default
     private String img = "http://localhost/image/image.png";
 
-
-/*    @ElementCollection(fetch = FetchType.EAGER)
+/*
+  @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();*/
 
@@ -75,10 +75,10 @@ public class Member {
         this.nickname = nickname;
     }
 
-  /*  public static Member toEntity(String password, String email, String nickname) {
+    public static Member toEntity(String password, String email, String nickname) {
         final Member member = new Member(password, email, nickname);
         return member;
-    }*/
+    }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
