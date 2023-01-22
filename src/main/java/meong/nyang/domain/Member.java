@@ -33,7 +33,6 @@ public class Member {
     @Column(name ="activated")
     private boolean activated;
 
-
     @NotNull
     @Builder.Default
     private String img = "http://localhost/image/image.png";
@@ -61,12 +60,13 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "member_authority",
-            joinColumns = {@JoinColumn(name = "memberId", referencedColumnName = "memberId")},
+            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "memberId")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
+
 
 
     public Member(String password, String email, String nickname) {

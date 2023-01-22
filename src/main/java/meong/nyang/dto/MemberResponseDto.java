@@ -2,9 +2,10 @@ package meong.nyang.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import meong.nyang.domain.Member;
 
-@Getter
+@Getter @Setter
 public class MemberResponseDto {
     private Long memberId;
     private String email;
@@ -18,4 +19,5 @@ public class MemberResponseDto {
         this.nickname = member.getNickname();
         this.password = member.getPassword();
     }
+
 }

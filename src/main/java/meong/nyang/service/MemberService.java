@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -49,70 +48,67 @@ public class MemberService {
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
-        System.out.println(authority.getAuthorityName());
 
         Member member = Member.builder()
+                .nickname(memberRequestDto.getNickname())
                 .email(memberRequestDto.getEmail())
                 .password(passwordEncoder.encode(memberRequestDto.getPassword()))
-                .nickname(memberRequestDto.getNickname())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();
-        System.out.println(authority.toString());
-        System.out.println(member.getId());
 
         return memberRequestDto.from(memberRepository.save(member));
     }
 
-    //email을 parameter로 받아서 어떠한 username이던 username에 해당하는 정보를 가져올 수 있다
-/*    @Transactional(readOnly = true)
-    public MemberRequestDto getUserWithAuthorities(String email) {
-        return MemberRequestDto.from(memberRepository.findOneWithAuthoritiesByEmail(email).orElse(null));
-    }*/
-    //security context에 저장된 user만
-/*    @Transactional(readOnly = true)
-    public MemberRequestDto getMyUserWithAuthorities() {
-        return MemberRequestDto.from(
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(memberRepository::findOneWithAuthoritiesByEmail)
-                        .orElseThrow(() -> new NotFoundMemberException("Member not found"))
-        );
-    }*//*
-   @Transactional
-    public Long createMember(MemberRequestDto memberRequestDto) throws IOException, Exception {
-       Member member = Member.toEntity(memberRequestDto.getPassword(), memberRequestDto.getEmail(), memberRequestDto.getNickname());
-       memberRepository.save(member);
-       return member.getId();*/
-
-       //Authority authority = new Authority("ROLE_USER");
-
-      // System.out.println(authority.getAuthorityName());
-
-
-/*
-
-  Member member = Member.builder()
-                        .nickname(memberRequestDto.getNickname())
-                        .email(memberRequestDto.getEmail())
-                        .password(passwordEncoder.encode(memberRequestDto.getPassword()))
-                        .authorities(Collections.singleton(authority))
-                        .build();
-*/
-    //}
-
-
-    //회원정보 수정 - 닉네임
-    @Transactional
-    public Long updateInfo(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
-        Optional<Member> findMember = memberRepository.findMemberByNickname(memberRequestDto.getNickname());
-        Member member = memberRepository.findMemberById(memberId);
-        if (findMember.isPresent() && !findMember.equals(memberId)) {
-            throw new Exception("해당 닉네임이 존재합니다");
-        } else {
-            member.updateNickname(memberRequestDto.getNickname());
+    public ResponseLoginMemberDto login(LoginDto loginDto) throws Exception {
+        Optional<Member> loginMember = memberRepository.findMemberByEmail(loginDto.getEmail());
+        if ((loginMember.orElse(null) == null) || !passwordEncoder.matches(loginDto.getPassword(), loginMember.get().getPassword())) {
+            throw new Exception("아이디와 비밀번호가 일치하지 않음");
         }
-        return member.getId();
+        else {
+            Member member = loginMember.get();
+            TokenDto tokenDtoResponseEntity = getTokenDtoResponseEntity(loginDto);
+            return new ResponseLoginMemberDto(
+                    tokenDtoResponseEntity.getToken(),
+                    member.getId(),
+                    member.getNickname(),
+                    member.getEmail());
+        }
+
     }
+
+    private TokenDto getTokenDtoResponseEntity(LoginDto loginDto) {
+        Member member = memberRepository.findByEmail(loginDto.getEmail());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getEmail(), loginDto.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(member.getId(), authentication);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new TokenDto(jwt);
+    }
+
+        //회원정보 수정
+        public void userUpdate (Member member, MemberUpdateDto memberUpdateDto) throws Exception {
+            Optional<Member> findMember = memberRepository.findMemberByNickname(memberUpdateDto.getNickname());
+            if (findMember.isPresent() && !member.getNickname().equals(memberUpdateDto.getNickname())) {
+                throw new Exception("아이디가 존재합니다.");
+            } else {
+                memberUpdateDto.setNickname(memberUpdateDto.getNickname());
+                member.updateNickname(memberUpdateDto.getNickname());
+            } if (memberUpdateDto.getImg().length() != 0) {
+                memberUpdateDto.setImg(memberUpdateDto.getImg());
+                member.updateImg(memberUpdateDto.getImg());
+            } else {
+                member.deletePhoto(memberUpdateDto.getImg());
+            }
+
+            memberRepository.save(member);
+        }
+
+
 
     @Transactional
     public MemberResponseDto findMemberByMemberId(Long memberId) {
@@ -139,30 +135,8 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    public ResponseLoginMemberDto login(LoginDto loginDto) throws Exception {
-        TokenDto tokenResponseEntity = getTokenDtoResponseEntity(loginDto);
-        Member member = memberRepository.findByEmail(loginDto.getEmail());
-        return new ResponseLoginMemberDto(
-                tokenResponseEntity.getToken(),
-                member.getId(),
-                member.getNickname(),
-                member.getEmail());
+
     }
-
-    private TokenDto getTokenDtoResponseEntity(LoginDto loginDto) {
-        Member member = memberRepository.findByEmail(loginDto.getEmail());
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(member.getId(),authentication);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        return new TokenDto(jwt);
-    }
-
-}
 
 
 

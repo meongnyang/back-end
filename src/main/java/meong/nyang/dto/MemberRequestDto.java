@@ -33,8 +33,8 @@ public class MemberRequestDto {
         if(member == null) return null;
 
         return MemberRequestDto.builder()
-                .email(member.getEmail())
                 .nickname(member.getNickname())
+                .email(member.getEmail())
                 .authorityDtoSet(member.getAuthorities().stream()
                         .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
                         .collect(Collectors.toSet()))
