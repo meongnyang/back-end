@@ -31,9 +31,11 @@ public class Post extends BaseEntity{
     private Long count = 0L;
 
     @NotNull
+    @Column(length = 65535)
     private String title;
 
     @NotNull
+    @Column(length = 65535)
     private String contents;
 
     private String img;
