@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -16,15 +15,13 @@ public class Disease {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diseaseId")
     private Long id;
-
     @NotNull
     private Long type;
-
     @NotNull
     private String name;
-
+    @Column(length = 65535)
     private String reason;
-
+    @Column(length = 65535)
     private String manage;
 
 }
