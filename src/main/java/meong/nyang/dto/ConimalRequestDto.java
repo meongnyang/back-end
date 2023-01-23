@@ -15,7 +15,7 @@ import java.util.Date;
 public class ConimalRequestDto {
     private Long type;
     private String name;
-    private Long gender;
+    private String gender;
     private Long neutering;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date birth;
@@ -25,7 +25,7 @@ public class ConimalRequestDto {
     private String speciesName;
 
     @Builder
-    public ConimalRequestDto(Long type, String name, Long gender, Long neutering, Date birth, Date adopt, String speciesName) {
+    public ConimalRequestDto(Long type, String name, String gender, Long neutering, Date birth, Date adopt, String speciesName) {
         this.type = type;
         this.name = name;
         this.gender = gender;
@@ -35,7 +35,7 @@ public class ConimalRequestDto {
         this.speciesName = speciesName;
     }
 
-    public static Conimal toEntity(Long type, String name, Long gender, Long neutering, Date birth, Date adopt, Member member, Species species){
+    public static Conimal toEntity(Long type, String name, String gender, Long neutering, Date birth, Date adopt, Member member, Species species){
         return Conimal.builder()
                 .type(type)
                 .name(name)
