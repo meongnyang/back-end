@@ -2,22 +2,24 @@ package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
+@Builder
+@Table(name="member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
+
 public class Member {
     @Id
+    @Column(name = "memberId", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberId")
     private Long id;
 
     private String password;
@@ -28,9 +30,17 @@ public class Member {
     @NotNull
     private String nickname;
 
+    @Column(name ="activated")
+    private boolean activated;
+
     @NotNull
-    @ColumnDefault("'http://localhost/image/image.png'")
-    private String img;
+    @Builder.Default
+    private String img = "http://localhost/image/image.png";
+
+/*
+  @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();*/
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Conimal> conimals = new ArrayList<>();
@@ -47,20 +57,24 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Record> records = new ArrayList<>();
 
-    @Builder
+    @ManyToMany
+    @JoinTable(
+            name = "member_authority",
+            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "memberId")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
+
+
+
     public Member(String password, String email, String nickname) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
     }
 
-    @Builder
-    public static Member toEntity(String password, String email, String nickname){
-        return Member.builder()
-                .password(password)
-                .email(email)
-                .nickname(nickname)
-                .build();
+    public static Member toEntity(String password, String email, String nickname) {
+        final Member member = new Member(password, email, nickname);
+        return member;
     }
 
     public void updateNickname(String nickname) {
@@ -74,4 +88,6 @@ public class Member {
     public void deletePhoto(String img) {
         this.img = "'http://localhost/image/image.png'";
     }
+
+
 }

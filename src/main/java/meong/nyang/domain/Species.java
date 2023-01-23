@@ -28,6 +28,9 @@ public class Species {
     @OneToMany(mappedBy = "species", cascade = CascadeType.ALL)
     private List<Conimal> conimals = new ArrayList<>();
 
+   /* @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="memberId")
+    private Member member;*/
     @Builder
     public Species(Long type, String name) {
         this.type = type;
