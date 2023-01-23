@@ -25,7 +25,7 @@ public class Conimal {
     @NotNull
     private String name;
     @NotNull
-    private Long gender;
+    private String gender;
     @NotNull
     private Long neutering;
     @NotNull
@@ -47,7 +47,7 @@ public class Conimal {
     private List<Record> recordList = new ArrayList<>();
 
     @Builder
-    public Conimal(Long type, String name, Long gender, Long neutering, Date birth, Date adopt, Member member, Species species) {
+    public Conimal(Long type, String name, String gender, Long neutering, Date birth, Date adopt, Member member, Species species) {
         this.type = type;
         this.name = name;
         this.gender = gender;
@@ -64,7 +64,7 @@ public class Conimal {
     public void updateName(String name) {
         this.name = name;
     }
-    public void updateGender(Long gender) {
+    public void updateGender(String gender) {
         this.gender = gender;
     }
     public void updateNeutering(Long neutering) {
