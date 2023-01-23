@@ -29,10 +29,10 @@ public class Post extends BaseEntity{
 
     @NotNull
     private Long count = 0L;
-
+    @Column(length = 65535)
     @NotNull
     private String title;
-
+    @Column(length = 65535)
     @NotNull
     private String contents;
 

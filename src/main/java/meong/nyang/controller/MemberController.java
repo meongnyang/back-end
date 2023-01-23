@@ -23,14 +23,15 @@ public class MemberController {
     private final MemberRepository memberRepository;
 
     @PostMapping("/members")
-    public ResponseEntity<MemberRequestDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
+    public ResponseEntity<MemberResponseDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
         Optional<Member> findMember = memberRepository.findMemberByEmail(memberRequestDto.getEmail());
         try {
             if (findMember.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            memberService.createMember(memberRequestDto);
-            return new ResponseEntity<>(memberRequestDto, HttpStatus.CREATED);
+            Long memberId = memberService.createMember(memberRequestDto);
+            MemberResponseDto responseDto = memberService.findMemberByMemberId(memberId);
+            return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

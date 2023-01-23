@@ -26,8 +26,8 @@ public abstract class BaseEntity {
 
     @PrePersist
     public void onPrePersist() {
-        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        this.createdTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        this.createdDate = LocalDateTime.now().plusHours(9).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        this.createdTime = LocalDateTime.now().plusHours(9).format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
 }

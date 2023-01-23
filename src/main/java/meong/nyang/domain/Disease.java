@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -22,9 +21,9 @@ public class Disease {
 
     @NotNull
     private String name;
-
+    @Column(length = 65535)
     private String reason;
-
+    @Column(length = 65535)
     private String manage;
 
 }

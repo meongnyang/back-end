@@ -1,7 +1,6 @@
 package meong.nyang.domain;
 
 import lombok.*;
-import meong.nyang.dto.CommentRequestDto;
 
 import javax.persistence.*;
 
@@ -14,7 +13,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "commentId")
     private Long id;
-
+    @Column(length = 65535)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
