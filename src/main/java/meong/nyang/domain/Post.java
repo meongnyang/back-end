@@ -35,7 +35,6 @@ public class Post extends BaseEntity{
     @Column(length = 65535)
     @NotNull
     private String contents;
-
     private String img;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
