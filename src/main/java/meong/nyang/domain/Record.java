@@ -1,9 +1,7 @@
 package meong.nyang.domain;
 
 import com.sun.istack.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,14 +9,13 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Record {
+@AllArgsConstructor
+@Builder
+public class Record extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recordId")
     private Long id;
-
-    @NotNull
-    private Date date;
 
     @NotNull
     private Long meal;
@@ -26,14 +23,12 @@ public class Record {
     @NotNull
     private Long voiding;
 
-    private String reason1;
+    private String voiding_reason;
 
     @NotNull
     private Long excretion;
 
-    private String reason2;
-
-    private String symptom;
+    private String excretion_reason;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberId")
@@ -42,5 +37,13 @@ public class Record {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="conimalId")
     private Conimal conimal;
+
+    public void update(Long meal, Long voiding, String voiding_reason, String excretion_reason, Long excretion) {
+        this.meal = meal;
+        this.voiding = voiding;
+        this.voiding_reason = voiding_reason;
+        this.excretion = excretion;
+        this.excretion_reason = excretion_reason;
+    }
 
 }
