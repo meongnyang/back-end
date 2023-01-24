@@ -11,7 +11,7 @@ public class ConimalResponseDto {
     private Long memberId;
     private Long type;
     private String name;
-    private Long gender;
+    private String gender;
     private Long neutering;
     private String img;
     private String speciesName;

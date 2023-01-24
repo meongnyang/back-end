@@ -13,7 +13,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "commentId")
     private Long id;
-    @Column(length = 65535)
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
