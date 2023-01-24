@@ -24,8 +24,8 @@ public class ConimalResponseDto {
 
     public ConimalResponseDto(Conimal conimal) {
         Date now = new Date();
-        Long DdayBirth = 0L;
-        Long DdayAdopt = 0L;
+        Long DdayBirth = 1L;
+        Long DdayAdopt = 1L;
         if (conimal.getBirth().getTime() > now.getTime()) DdayBirth = 0L;
         else DdayBirth = ((now.getTime() - conimal.getBirth().getTime()) /1000)/(24*60*60);
         if (conimal.getAdopt().getTime() > now.getTime()) DdayAdopt = 0L;
