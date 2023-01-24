@@ -54,7 +54,7 @@ public class RecordService {
        return record.getId();
     }
     @Transactional(readOnly = true)
-    public RecordResponseDto getRecord(Long recordId, RecordRequestDto recordRequestDto) {
+    public RecordResponseDto getRecord(Long recordId) {
         Record findRecord = recordRepository.findById(recordId).get();
         return new RecordResponseDto(findRecord);
     }
