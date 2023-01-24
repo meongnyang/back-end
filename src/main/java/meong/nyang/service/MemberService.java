@@ -37,30 +37,62 @@ public class MemberService {
         }
         return member.getId();
     }
-
-    @Transactional
-    public MemberResponseDto findMemberByMemberId(Long memberId) {
-        Member member = memberRepository.findMemberById(memberId);
-        return new MemberResponseDto(member);
+    //아이디로 회원 정보 찾기
+    @Transactional(readOnly = true)
+    public MemberResponseDto findMemberByMemberId(Long memberId) throws Exception{
+        Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberById(memberId));
+        if (findMember.isPresent()) {
+            Member member = memberRepository.findMemberById(memberId);
+            return new MemberResponseDto(member);
+        } else {
+            throw new Exception("회원 정보가 없습니다.");
+        }
     }
-
+    //회원 이미지 수정
     @Transactional
     public Long updateImg(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
-        Member findMember = memberRepository.findMemberById(memberId);
-        findMember.updateImg(memberRequestDto.getImg());
-        return findMember.getId();
+        Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberById(memberId));
+        if (findMember.isEmpty()) {
+            Member member = memberRepository.findMemberById(memberId);
+            member.updateImg(memberRequestDto.getImg());
+            return member.getId();
+        } else {
+            throw new Exception("회원 정보가 없습니다.");
+        }
     }
-
+    //회원 이미지 삭제
     @Transactional
     public Long deleteImg(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
-        Member findMember = memberRepository.findMemberById(memberId);
-        findMember.deletePhoto(memberRequestDto.getImg());
-        return findMember.getId();
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        if (findMember.isEmpty()) {
+            throw new Exception("회원 정보가 없습니다.");
+        } else {
+            Member member = memberRepository.findMemberById(memberId);
+            member.deletePhoto(memberRequestDto.getImg());
+            return member.getId();
+        }
     }
-
+    //회원 삭제
     @Transactional
-    public void deleteMember(Long memberId) {
-       memberRepository.deleteById(memberId);
+    public void deleteMember(Long memberId) throws Exception {
+       Optional<Member> findMember = memberRepository.findById(memberId);
+       if (findMember.isEmpty()) {
+           throw new Exception("회원 정보가 없습니다.");
+       } else {
+           memberRepository.deleteById(memberId);
+       }
+    }
+    //이메일로 회원Id 찾기
+    @Transactional(readOnly = true)
+    public Long findMemberIdByEmail(String email) throws Exception{
+        Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberByEmail(email));
+        if (findMember.isEmpty()) {
+            System.out.println(email);
+            throw new Exception("회원 정보가 없습니다.");
+        } else {
+            Member member = memberRepository.findMemberByEmail(email);
+            return member.getId();
+        }
     }
 }
 
