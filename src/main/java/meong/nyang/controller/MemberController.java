@@ -1,6 +1,5 @@
 package meong.nyang.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import meong.nyang.domain.Member;
@@ -8,11 +7,12 @@ import meong.nyang.dto.MemberRequestDto;
 import meong.nyang.dto.MemberResponseDto;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.service.MemberService;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Log4j2
@@ -24,7 +24,7 @@ public class MemberController {
 
     @PostMapping("/members")
     public ResponseEntity<MemberResponseDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
-        Optional<Member> findMember = memberRepository.findMemberByEmail(memberRequestDto.getEmail());
+        Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberByEmail(memberRequestDto.getEmail()));
         try {
             if (findMember.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -38,35 +38,59 @@ public class MemberController {
         }
     }
 
-
     @PatchMapping("/members/updateNickName/{memberId}")
-    public MemberResponseDto updateNickName(@PathVariable Long memberId,
+    public ResponseEntity<MemberResponseDto> updateNickName(@PathVariable Long memberId,
                                             @RequestBody MemberRequestDto memberRequestDto, Member member) throws Exception {
-        Long findMemberId = memberService.updateInfo(memberRequestDto, memberId);
-        MemberResponseDto responseDto = memberService.findMemberByMemberId(findMemberId);
-
-        return responseDto;
+        try {
+            Long findMemberId = memberService.updateInfo(memberRequestDto, memberId);
+            MemberResponseDto responseDto = memberService.findMemberByMemberId(findMemberId);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     //사진 수정
     @PatchMapping("/members/updatePhoto/{membersId}")
-    public MemberResponseDto updateImg(@PathVariable Long membersId,
+    public ResponseEntity<MemberResponseDto> updateImg(@PathVariable Long membersId,
                                        @RequestBody MemberRequestDto memberRequestDto) throws Exception {
-        if (memberRequestDto.getImg().length() != 0) {
-            Long findMemberId = memberService.updateImg(memberRequestDto, membersId);
-            MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
-            return memberResponseDto;
-        } else {
-            Long findMemberId = memberService.deleteImg(memberRequestDto, membersId);
-            MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
-            return memberResponseDto;
+        try {
+            if (memberRequestDto.getImg().length() != 0) {
+                Long findMemberId = memberService.updateImg(memberRequestDto, membersId);
+                MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
+                return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
+            } else {
+                Long findMemberId = memberService.deleteImg(memberRequestDto, membersId);
+                MemberResponseDto memberResponseDto = memberService.findMemberByMemberId(findMemberId);
+                return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
-
+    //회원 탈퇴
     @DeleteMapping("members/{memberId}")
-    public void deleteUser (@PathVariable Long memberId) {
-        memberService.deleteMember(memberId);
+    public ResponseEntity<?> deleteUser (@PathVariable Long memberId) throws Exception {
+        try {
+            memberService.deleteMember(memberId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    //email정보로 id찾기
+    @GetMapping("members/{email}")
+    public ResponseEntity<String> findMemberIdByEmail(@RequestBody String email) throws Exception {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject value = (JSONObject) jsonParser.parse(email);
+            Long memberId = memberService.findMemberIdByEmail((String) value.get("email"));
+            System.out.println((String) value.get("email"));
+            String json = "{\"memberId\" : " + memberId + "}";
+            return new ResponseEntity<>(json, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
 
