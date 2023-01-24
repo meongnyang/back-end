@@ -10,8 +10,8 @@ import java.util.Date;
 public class MyPageConimalResponseDto {
 
     private String name;
-    private Long gender;
-    private Species species;
+    private String gender;
+    private String species;
     private Long ddaybirth;
     private Long ddayadopt;
     private String conimalImg;
@@ -27,7 +27,7 @@ public class MyPageConimalResponseDto {
 
         this.name = conimal.getName();
         this.gender = conimal.getGender();
-        this.species = conimal.getSpecies();
+        this.species = conimal.getSpecies().getName();
         this.ddaybirth = DdayBirth;
         this.ddayadopt = DdayAdopt;
         this.conimalImg = conimal.getImg();
