@@ -69,7 +69,7 @@ public class MemberController {
         }
     }
     //회원 탈퇴
-    @DeleteMapping("members/{memberId}")
+    @DeleteMapping("/members/{memberId}")
     public ResponseEntity<?> deleteUser (@PathVariable Long memberId) throws Exception {
         try {
             memberService.deleteMember(memberId);
@@ -79,7 +79,7 @@ public class MemberController {
         }
     }
     //email정보로 id찾기
-    @GetMapping("members/{email}")
+    @GetMapping("/members/findId")
     public ResponseEntity<String> findMemberIdByEmail(@RequestBody String email) throws Exception {
         try {
             JSONParser jsonParser = new JSONParser();
