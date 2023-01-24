@@ -21,22 +21,32 @@ public class LikesService {
 
     //좋아요(정보가 있으면 삭제, 정보가 없으면 생성)
     @Transactional
-    public void postLike(Long memberId, Long postId) {
-        Member member = memberRepository.findById(memberId).get();
-        Post post = postRepository.findById(postId).get();
-        Optional<Likes> likes = likesRepository.findLikesByMemberIdAndPostId(member.getId(), post.getId());
-        likes.ifPresentOrElse(
-                //좋아요를 이미 누른 경우 삭제
-                likes1 -> {
-                    likesRepository.deleteById(likes1.getId());
-                    post.updateLikes(post.getCount()-1L);
-                },
-                () -> {
-                    //좋아요가 안눌린 경우 좋아요를 누름
-                    Likes likes1 = likesRepository.save(LikesRequestDto.toEntity(member,post));
-                    post.updateLikes(post.getCount()+1L);
-                }
-        );
+    public void postLike(Long memberId, Long postId) throws Exception{
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        Optional<Post> findPost = postRepository.findById(postId);
+        if (findMember.isEmpty() && findPost.isEmpty()) {
+            throw new Exception("회원과 게시글을 찾을 수 없습니다.");
+        } else if (findMember.isEmpty()) {
+            throw new Exception("회원을 찾을 수 없습니다.");
+        } else if (findPost.isEmpty()) {
+            throw new Exception("게시글을 찾을 수 없습니다.");
+        } else {
+            Member member = memberRepository.findById(memberId).get();
+            Post post = postRepository.findById(postId).get();
+            Optional<Likes> likes = likesRepository.findLikesByMemberIdAndPostId(member.getId(), post.getId());
+            likes.ifPresentOrElse(
+                    //좋아요를 이미 누른 경우 삭제
+                    likes1 -> {
+                        likesRepository.deleteById(likes1.getId());
+                        post.updateLikes(post.getCount()-1L);
+                    },
+                    () -> {
+                        //좋아요가 안눌린 경우 좋아요를 누름
+                        Likes likes1 = likesRepository.save(LikesRequestDto.toEntity(member,post));
+                        post.updateLikes(post.getCount()+1L);
+                    }
+            );
+        }
     }
 
     //특정 게시글의 좋아요 개수 조회
