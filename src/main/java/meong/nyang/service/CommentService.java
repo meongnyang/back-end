@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -24,28 +25,47 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-
     //댓글 생성
     @Transactional
-    public Long createComment(CommentRequestDto commentDto, Long memberId, Long postId) {
-        Post post = postRepository.findById(postId).get();
-        Member member = memberRepository.findById(memberId).get();
-        Comment comment = commentRepository.save(CommentRequestDto.toEntity(commentDto.getContents(), member, post));
-        return comment.getId();
+    public Long createComment(CommentRequestDto commentDto, Long memberId, Long postId) throws Exception{
+        Optional<Post> findPost = postRepository.findById(postId);
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        if (findPost.isEmpty() && findMember.isEmpty()) {
+            throw new Exception("회원 정보와 게시글 정보가 존재하지 않습니다.");
+        } else if (findPost.isEmpty()) {
+            throw new Exception("게시글 정보가 존재하지 않습니다.");
+        } else if (findMember.isEmpty()) {
+            throw new Exception("회원 정보가 존재하지 않습니다.");
+        } else {
+            Post post = postRepository.findById(postId).get();
+            Member member = memberRepository.findById(memberId).get();
+            Comment comment = commentRepository.save(CommentRequestDto.toEntity(commentDto.getContents(), member, post));
+            return comment.getId();
+        }
     }
 
     //댓글 수정
     @Transactional
-    public Long updateComment(CommentRequestDto commentRequestDto, Long commentId) {
-        Comment comment = commentRepository.findCommentById(commentId);
-        comment.update(commentRequestDto.getContents());
-        return comment.getId();
+    public Long updateComment(CommentRequestDto commentRequestDto, Long commentId) throws Exception{
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+        if (findComment.isEmpty()) {
+            throw new Exception("댓글 정보가 존재하지 않습니다.");
+        } else {
+            Comment comment = commentRepository.findCommentById(commentId);
+            comment.update(commentRequestDto.getContents());
+            return comment.getId();
+        }
     }
 
     //댓글 삭제
     @Transactional
-    public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);
+    public void deleteComment(Long commentId) throws Exception{
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+        if (findComment.isEmpty()) {
+            throw new Exception("댓글 정보가 존재하지 않습니다.");
+        } else {
+            commentRepository.deleteById(commentId);
+        }
     }
 
     //댓글 모두 조회
@@ -58,16 +78,21 @@ public class CommentService {
 
     //특정 게시글에 연관된 모든 댓글 조회
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> findCommentsByPostId(Long postId) {
+    public List<CommentResponseDto> findCommentsByPostId(Long postId){
         List<Comment> list = commentRepository.findCommentsByPostId(postId);
         return list.stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 
     //특정 댓글 조회
     @Transactional(readOnly = true)
-    public CommentResponseDto findCommentsByCommentsId(Long commentsId) {
-        Comment comment = commentRepository.findCommentById(commentsId);
-        return new CommentResponseDto(comment);
+    public CommentResponseDto findCommentsByCommentsId(Long commentId) throws Exception {
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+        if (findComment.isEmpty()) {
+            throw new Exception("댓글 정보가 존재하지 않습니다.");
+        } else {
+            Comment comment = commentRepository.findCommentById(commentId);
+            return new CommentResponseDto(comment);
+        }
     }
 
 }
