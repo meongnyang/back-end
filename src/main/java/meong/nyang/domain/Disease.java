@@ -15,15 +15,13 @@ public class Disease {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diseaseId")
     private Long id;
-
     @NotNull
     private Long type;
-
     @NotNull
     private String name;
-    @Column(length = 65535)
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String reason;
-    @Column(length = 65535)
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String manage;
 
 }

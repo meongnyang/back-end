@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @DynamicInsert
@@ -29,10 +30,10 @@ public class Post extends BaseEntity{
 
     @NotNull
     private Long count = 0L;
-    @Column(length = 65535)
+    @Column(columnDefinition = "TEXT", length = 65535)
     @NotNull
     private String title;
-    @Column(length = 65535)
+    @Column(columnDefinition = "TEXT", length = 65535)
     @NotNull
     private String contents;
     private String img;
@@ -67,5 +68,20 @@ public class Post extends BaseEntity{
 
     public void updateLikes(Long count) {
         this.count = count;
+    }
+    public void updateCategory(Long category) {
+        this.category = category;
+    }
+    public void updateType(Long type) {
+        this.type = type;
+    }
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+    public void updateContents(String contents) {
+        this.contents = contents;
+    }
+    public void updateImg(String img) {
+        this.img = img;
     }
 }
