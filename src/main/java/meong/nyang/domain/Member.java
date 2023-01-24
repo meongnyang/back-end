@@ -1,5 +1,6 @@
 package meong.nyang.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
+@ToString(exclude = "conimal")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
