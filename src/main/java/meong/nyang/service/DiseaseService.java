@@ -12,8 +12,8 @@ public class DiseaseService {
     private final DiseaseRepository diseaseRepository;
 
     //특정 피부병 정보 가져오기
-    public DiseaseResponseDto findDiseaseByType(Long diseaseId, Long type) {
-        Disease disease = diseaseRepository.findDiseaseByIdAndType(diseaseId, type);
+    public DiseaseResponseDto findDiseaseByName(String name) {
+        Disease disease = diseaseRepository.findDiseaseByName(name);
         return new DiseaseResponseDto(disease);
     }
 }

@@ -35,7 +35,7 @@ public class Conimal {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @NotNull
     Date adopt;
-    private String img = "'http://localhost/image/image.png'";
+    private String img = "http://localhost/image/image.png";
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name="memberId")

@@ -85,7 +85,6 @@ public class MemberController {
             JSONParser jsonParser = new JSONParser();
             JSONObject value = (JSONObject) jsonParser.parse(email);
             Long memberId = memberService.findMemberIdByEmail((String) value.get("email"));
-            System.out.println((String) value.get("email"));
             String json = "{\"memberId\" : " + memberId + "}";
             return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception e) {

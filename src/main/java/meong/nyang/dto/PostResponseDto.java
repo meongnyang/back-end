@@ -18,6 +18,7 @@ public class PostResponseDto {
     private Long count;
     private String img;
     private Long memberId;
+    private String nickname;
     private String date;
     private String time;
 
@@ -29,6 +30,7 @@ public class PostResponseDto {
             put(3L, "1일 1자랑");
         }};
         this.memberId = post.getMember().getId();
+        this.nickname = post.getMember().getNickname();
         this.postId = post.getId();
         this.category = post.getCategory();
         this.categoryName = dict.get(post.getCategory());

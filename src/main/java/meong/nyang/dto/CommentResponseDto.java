@@ -11,11 +11,13 @@ public class CommentResponseDto {
     private String contents;
     private Long memberId;
     private Long postId;
+    private String nickname;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
         this.contents = comment.getContents();
         this.memberId = comment.getMember().getId();
         this.postId = comment.getPost().getId();
+        this.nickname = comment.getMember().getNickname();
     }
 }

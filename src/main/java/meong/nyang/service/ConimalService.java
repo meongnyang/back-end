@@ -27,8 +27,11 @@ public class ConimalService {
     @Transactional
     public Long createConimal(ConimalRequestDto conimalRequestDto, Long memberId) throws Exception{
         Optional<Member> findMember = memberRepository.findById(memberId);
+        Optional<Species> findSpecies = Optional.ofNullable(speciesRepository.findSpeciesByName(conimalRequestDto.getSpeciesName()));
         if (findMember.isEmpty()) {
             throw new Exception("회원이 존재하지 않습니다.");
+        } else if (findSpecies.isEmpty()) {
+            throw new Exception("종 정보가 존재하지 않습니다.");
         } else {
             Member member = memberRepository.findMemberById(memberId);
             Species species = speciesRepository.findSpeciesByName(conimalRequestDto.getSpeciesName());
@@ -54,7 +57,7 @@ public class ConimalService {
             if (dto.getNeutering() != null) conimal.updateNeutering(dto.getNeutering());
             if (dto.getBirth() != null) conimal.updateBirth(dto.getBirth());
             if (dto.getAdopt() != null) conimal.updateAdopt(dto.getAdopt());
-            if (dto.getImg() != null) conimal.updateImg(dto.getImg()); else conimal.updateImg("'http://localhost/image/image.png'");
+            if (dto.getImg() != null) conimal.updateImg(dto.getImg()); else conimal.updateImg("http://localhost/image/image.png");
             if (dto.getSpeciesName() != null) conimal.updateSpecies(species);
             return conimal.getId();
         }

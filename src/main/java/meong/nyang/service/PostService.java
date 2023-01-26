@@ -70,8 +70,7 @@ public class PostService {
     //모든 게시글 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> findAllPosts() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-        List<Post> list = postRepository.findAll();
+        List<Post> list = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return list.stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
