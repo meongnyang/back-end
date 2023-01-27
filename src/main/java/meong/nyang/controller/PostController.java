@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import meong.nyang.dto.PostRequestDto;
 import meong.nyang.dto.PostResponseDto;
-import meong.nyang.service.MemberService;
 import meong.nyang.service.PostService;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PostController {
-    private final MemberService memberService;
     private final PostService postService;
     //게시글 작성
     @PostMapping("/posts/{memberId}")
@@ -83,6 +83,20 @@ public class PostController {
             PostResponseDto post = postService.findBestPostByDate(type);
             PostResponseDto responseDto = postService.findBestPostByDate(type);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //게시글 제목으로 postId찾기
+    @PostMapping("/posts/findid")
+    public ResponseEntity<String> findPostIdByTitle(@RequestBody String title) throws Exception {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject value = (JSONObject) jsonParser.parse(title);
+            Long postId = postService.findPostIdByTitle((String) value.get("title"));
+            String json = "{\"postId\" : " + postId + "}";
+            return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

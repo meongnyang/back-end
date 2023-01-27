@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByCreatedDateAndCategoryAndType(String currentDate, Long category, Long type);
+    Post findPostByTitle(String title);
 }

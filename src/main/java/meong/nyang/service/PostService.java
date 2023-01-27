@@ -99,4 +99,16 @@ public class PostService {
             return new PostResponseDto(bestPost);
         }
     }
+
+    //게시글 제목으로 게시글 Id찾기
+    @Transactional(readOnly = true)
+    public Long findPostIdByTitle(String title) throws Exception{
+        Optional<Post> findPost = Optional.ofNullable(postRepository.findPostByTitle(title));
+        if (findPost.isEmpty()) {
+            throw new Exception("게시글이 존재하지 않습니다.");
+        } else {
+            Post post = postRepository.findPostByTitle(title);
+            return post.getId();
+        }
+    }
 }
