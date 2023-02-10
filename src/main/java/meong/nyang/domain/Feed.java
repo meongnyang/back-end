@@ -25,14 +25,13 @@ public class Feed {
     private Long type;
 
     @NotNull
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String material;
 
     @NotNull
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String ingredient;
 
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String img;
-
-    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-    private List<Efficacy> efficacyList = new ArrayList<>();
-
 }
