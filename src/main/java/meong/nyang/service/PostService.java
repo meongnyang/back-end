@@ -49,7 +49,7 @@ public class PostService {
             PostRequestDto dto = postRequestDto;
             if (dto.getCategory() != null) post.updateCategory(dto.getCategory());
             if (dto.getType() != null) post.updateType(dto.getType());
-            if (dto.getImg() != null) post.updateImg(dto.getImg());
+            if (dto.getImg() != null) post.updateImg(dto.getImg()); else post.deleteImg();
             if (dto.getTitle() != null) post.updateTitle(dto.getTitle());
             if (dto.getContents() != null ) post.updateContents(dto.getContents());
             return post.getId();

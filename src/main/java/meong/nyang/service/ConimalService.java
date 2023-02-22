@@ -57,7 +57,7 @@ public class ConimalService {
             if (dto.getNeutering() != null) conimal.updateNeutering(dto.getNeutering());
             if (dto.getBirth() != null) conimal.updateBirth(dto.getBirth());
             if (dto.getAdopt() != null) conimal.updateAdopt(dto.getAdopt());
-            if (dto.getImg() != null) conimal.updateImg(dto.getImg()); else conimal.updateImg("http://localhost/image/image.png");
+            if (dto.getImg() != null) conimal.updateImg(dto.getImg()); else conimal.deleteImg();
             if (dto.getSpeciesName() != null) conimal.updateSpecies(species);
             return conimal.getId();
         }

@@ -84,4 +84,5 @@ public class Post extends BaseEntity{
     public void updateImg(String img) {
         this.img = img;
     }
+    public void deleteImg() { this.img = null; }
 }
