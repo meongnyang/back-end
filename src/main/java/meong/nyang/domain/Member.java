@@ -31,8 +31,7 @@ public class Member {
     private String nickname;
 
     @NotNull
-    @ColumnDefault("'http://localhost/image/image.png'")
-    private String img;
+    private String img = "https://meongnyang.s3.ap-northeast-2.amazonaws.com/person/profile.png";
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Conimal> conimals = new ArrayList<>();
@@ -73,7 +72,7 @@ public class Member {
         this.img = img;
     }
 
-    public void deletePhoto(String img) {
-        this.img = "'http://localhost/image/image.png'";
+    public void deletePhoto() {
+        this.img = "https://meongnyang.s3.ap-northeast-2.amazonaws.com/person/profile.png";
     }
 }

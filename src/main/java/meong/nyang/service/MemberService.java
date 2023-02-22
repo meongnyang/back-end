@@ -53,11 +53,11 @@ public class MemberService {
     public Long updateImg(MemberRequestDto memberRequestDto, Long memberId) throws Exception {
         Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberById(memberId));
         if (findMember.isEmpty()) {
+            throw new Exception("회원 정보가 없습니다.");
+        } else {
             Member member = memberRepository.findMemberById(memberId);
             member.updateImg(memberRequestDto.getImg());
             return member.getId();
-        } else {
-            throw new Exception("회원 정보가 없습니다.");
         }
     }
     //회원 이미지 삭제
@@ -68,7 +68,7 @@ public class MemberService {
             throw new Exception("회원 정보가 없습니다.");
         } else {
             Member member = memberRepository.findMemberById(memberId);
-            member.deletePhoto(memberRequestDto.getImg());
+            member.deletePhoto();
             return member.getId();
         }
     }

@@ -35,7 +35,7 @@ public class Conimal {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @NotNull
     Date adopt;
-    private String img = "http://localhost/image/image.png";
+    private String img = "https://meongnyang.s3.ap-northeast-2.amazonaws.com/conimal/pet_profile.png";
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name="memberId")
@@ -82,7 +82,9 @@ public class Conimal {
     public void updateImg(String img) {
         this.img = img;
     }
+    public void deleteImg() { this.img = "https://meongnyang.s3.ap-northeast-2.amazonaws.com/conimal/pet_profile.png"; }
     public void updateSpecies(Species species) {
         this.species = species;
     }
+
 }
