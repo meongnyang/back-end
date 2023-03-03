@@ -16,6 +16,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - build:
+
+          runs-on: ubuntu-latest
+
+          steps:
+            - name: Set Up MySQL
+              uses: samin/mysql-action@v1
+              with:
+                host port: 3306
+                container port: 3306
+                character set server: 'utf8'
+                mysql database: 'meongnyang'
+                mysql password: ${{ secrets.DB_PASSWORD }}
+                mysql user: 'jeongjiyeon'
+                mysql root password: ${{ secrets.ROOT_PASSWORD }}
+
       # 작업에서 액세스할 수 있도록 $GITHUB_WORKSPACE에서 저장소를 체크아웃합니다.
       - uses: actions/checkout@v2
       - name: Set up JDK 11
