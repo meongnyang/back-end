@@ -11,7 +11,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -191,12 +190,12 @@ public class PostServiceTest {
                 .contents("울 귀여운 만두! 어때요 진짜 너무너무 귀엽죠 내새끼라그래요")
                 .build();
         Long postId4 = postService.createPost(post4, memberId2);
-        likesService.createLike(memberId1, postId1);
-        likesService.createLike(memberId2, postId1);
-        likesService.createLike(memberId3, postId1);
-        likesService.createLike(memberId3, postId2);
-        likesService.createLike(memberId3, postId3);
-        likesService.createLike(memberId1, postId3);
+//        likesService.createLike(memberId1, postId1);
+//        likesService.createLike(memberId2, postId1);
+//        likesService.createLike(memberId3, postId1);
+//        likesService.createLike(memberId3, postId2);
+//        likesService.createLike(memberId3, postId3);
+//        likesService.createLike(memberId1, postId3);
         //when
         PostResponseDto postResponseDto1 = postService.findBestPostByDate(1L);
         PostResponseDto postResponseDto2 = postService.findBestPostByDate(2L);

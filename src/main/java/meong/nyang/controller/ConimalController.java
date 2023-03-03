@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import meong.nyang.dto.ConimalRequestDto;
 import meong.nyang.dto.ConimalResponseDto;
-import meong.nyang.dto.MemberResponseDto;
 import meong.nyang.service.ConimalService;
-import meong.nyang.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class ConimalController {
-    private final MemberService memberService;
     private final ConimalService conimalService;
 
     //반려동물 정보 등록
