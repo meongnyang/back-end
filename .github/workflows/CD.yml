@@ -61,5 +61,5 @@ jobs:
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name cicd \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=project-bucket-v1,bundleType=zip,key=meongnyang/$GITHUB_SHA.zip \
+          --s3-location bucket=meongnyang,bundleType=zip,key=meongnyang/$GITHUB_SHA.zip \
           --region ap-northeast-2 \
