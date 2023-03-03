@@ -1,9 +1,7 @@
 package meong.nyang.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import meong.nyang.dto.CommentResponseDto;
 import meong.nyang.dto.RecordRequestDto;
 import meong.nyang.dto.RecordResponseDto;
 import meong.nyang.service.RecordService;
