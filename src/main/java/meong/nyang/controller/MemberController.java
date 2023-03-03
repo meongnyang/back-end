@@ -79,7 +79,7 @@ public class MemberController {
         }
     }
     //email정보로 id찾기
-    @GetMapping("/members/findId")
+    @PostMapping("/members/findId")
     public ResponseEntity<String> findMemberIdByEmail(@RequestBody String email) throws Exception {
         try {
             JSONParser jsonParser = new JSONParser();
