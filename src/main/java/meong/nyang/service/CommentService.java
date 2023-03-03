@@ -6,6 +6,8 @@ import meong.nyang.domain.Member;
 import meong.nyang.domain.Post;
 import meong.nyang.dto.CommentRequestDto;
 import meong.nyang.dto.CommentResponseDto;
+import meong.nyang.dto.ReCommentRequestDto;
+import meong.nyang.dto.ReCommentResponseDto;
 import meong.nyang.repository.CommentRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.PostRepository;
@@ -43,6 +45,29 @@ public class CommentService {
             return comment.getId();
         }
     }
+
+    // 대댓글 생성
+    @Transactional
+    public Long createReComment(Long postId, Long parentId, Long memberId, ReCommentRequestDto commentRequestDto) throws Exception {
+        Optional<Comment> findComment = commentRepository.findById(parentId);
+        Optional<Post> findPost = postRepository.findById(postId);
+
+        if (findPost.isEmpty() && findComment.isEmpty()) {
+            throw new Exception("해당 댓글과 게시글 정보가 존재하지 않습니다.");
+        } else if (findPost.isEmpty()) {
+            throw new Exception("게시글 정보가 존재하지 않습니다.");
+        } else if (findComment.isEmpty()) {
+            throw new Exception("해당 댓글이 존재하지 않습니다.");
+        } else {
+            Post post = postRepository.findById(postId).get();
+            Member member = memberRepository.findById(memberId).get();
+            Comment parent = commentRepository.findCommentById(parentId);
+            Comment reComment = commentRepository.save(ReCommentRequestDto.toEntity(commentRequestDto.getContents(), member, post, parent));
+
+            return reComment.getId();
+        }
+    }
+
 
     //댓글 수정
     @Transactional
@@ -92,6 +117,18 @@ public class CommentService {
         } else {
             Comment comment = commentRepository.findCommentById(commentId);
             return new CommentResponseDto(comment);
+        }
+    }
+
+    //특정 댓글 조회
+    @Transactional(readOnly = true)
+    public ReCommentResponseDto findReCommentsByCommentsId(Long commentId) throws Exception {
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+        if (findComment.isEmpty()) {
+            throw new Exception("댓글 정보가 존재하지 않습니다.");
+        } else {
+            Comment comment = commentRepository.findCommentById(commentId);
+            return new ReCommentResponseDto(comment);
         }
     }
 

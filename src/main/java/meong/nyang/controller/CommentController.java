@@ -1,9 +1,9 @@
 package meong.nyang.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import meong.nyang.dto.CommentRequestDto;
-import meong.nyang.dto.CommentResponseDto;
+import meong.nyang.dto.*;
 import meong.nyang.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,21 @@ public class CommentController {
             return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //대댓글 작성
+    @PostMapping("/comments/{memberId}/{postId}/{commentId}")
+    public ResponseEntity<ReCommentResponseDto> reCommentSave(@PathVariable("memberId") Long memberId,
+                                                              @PathVariable("postId") Long postId,
+                                                              @PathVariable("commentId") Long parentId,
+                                                              @RequestBody ReCommentRequestDto commentRequestDto) throws Exception {
+        try {
+            Long commentId = commentService.createReComment(parentId, postId, memberId, commentRequestDto);
+            ReCommentResponseDto responseDto = commentService.findReCommentsByCommentsId(commentId);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     //댓글 수정

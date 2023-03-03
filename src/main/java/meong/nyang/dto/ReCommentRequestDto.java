@@ -9,21 +9,21 @@ import meong.nyang.domain.Post;
 
 @Getter
 @NoArgsConstructor
-public class CommentRequestDto {
+public class ReCommentRequestDto {
+
     private String contents;
 
     @Builder
-    public CommentRequestDto(String contents) {
+    public ReCommentRequestDto(String contents) {
         this.contents = contents;
     }
 
-    public static Comment toEntity(String contents, Member member, Post post){
+    public static Comment toEntity(String contents, Member member, Post post, Comment parent) {
         return Comment.builder()
                 .contents(contents)
                 .member(member)
                 .post(post)
+                .parent(parent)
                 .build();
     }
-
-
 }
