@@ -5,10 +5,10 @@ spring:
             settings:
                 web-allow-others: true  # 추가
     datasource:
-        url: jdbc:h2:tcp://localhost/~/meongnyang
-        username: sa
-        password:
-        driver-class-name: org.h2.Driver
+        url: jdbc:mysql://43.201.122.215:3306/meongnyang
+        username: jeongjiyeon
+        password: meongnyang
+        driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         hibernate:
             ddl-auto: create-drop
