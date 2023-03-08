@@ -11,12 +11,10 @@ import meong.nyang.dto.ReCommentResponseDto;
 import meong.nyang.repository.CommentRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.PostRepository;
-import meong.nyang.repository.ReCommentRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
-    private final ReCommentRepository reCommentRepository;
+
 
     //댓글 생성
     @Transactional
@@ -67,7 +65,7 @@ public class CommentService {
             Member member = memberRepository.findById(memberId).get();
             //Comment parent = commentRepository.findCommentById(parentId);
             Comment parent = commentRepository.findCommentById(parentId);
-            Comment reComment = reCommentRepository.save(ReCommentRequestDto.toEntity(commentRequestDto.getContents(), member, post, parent));
+            Comment reComment = commentRepository.save(ReCommentRequestDto.toEntity(commentRequestDto.getContents(), member, post, parent));
 
             reComment.updateReComment(true);
             return reComment.getId();
