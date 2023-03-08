@@ -2,8 +2,8 @@ package meong.nyang.dto;
 
 import lombok.Getter;
 import meong.nyang.domain.Comment;
-import meong.nyang.domain.Member;
-import meong.nyang.domain.Post;
+
+import java.util.List;
 
 @Getter
 public class CommentResponseDto {
@@ -12,6 +12,9 @@ public class CommentResponseDto {
     private Long memberId;
     private Long postId;
     private String nickname;
+    private List<Comment> commentList;
+
+    private boolean isReComment;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
@@ -19,5 +22,8 @@ public class CommentResponseDto {
         this.memberId = comment.getMember().getId();
         this.postId = comment.getPost().getId();
         this.nickname = comment.getMember().getNickname();
+        this.commentList = comment.getChildList();
+        this.isReComment = false;
     }
+
 }
