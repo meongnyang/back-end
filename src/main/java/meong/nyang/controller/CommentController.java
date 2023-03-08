@@ -1,8 +1,8 @@
 package meong.nyang.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import meong.nyang.domain.Comment;
 import meong.nyang.dto.*;
 import meong.nyang.service.CommentService;
 import org.springframework.http.HttpStatus;
@@ -69,8 +69,13 @@ public class CommentController {
     }
     //특정 게시글에 달린 모든 댓글
     @GetMapping("/comments/{postId}")
-    public List<CommentResponseDto> findComments(@PathVariable Long postId) {
-        List<CommentResponseDto> responseDtoList = commentService.findCommentsByPostId(postId);
+    List<CommentResponseDto> findComments(@PathVariable Long postId) {
+            List<CommentResponseDto> responseDtoList = commentService.findCommentsByPostId(postId);
+        for(CommentResponseDto comment: responseDtoList) {
+            if(comment.isReComment() != false){
+
+            }
+        }
         return responseDtoList;
     }
 }
