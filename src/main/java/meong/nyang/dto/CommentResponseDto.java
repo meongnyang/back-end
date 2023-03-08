@@ -23,7 +23,7 @@ public class CommentResponseDto {
         this.postId = comment.getPost().getId();
         this.nickname = comment.getMember().getNickname();
         this.commentList = comment.getChildList();
-        this.isReComment = false;
+        this.isReComment = comment.isReComment();
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,8 +44,6 @@ public class CommentService {
             Post post = postRepository.findById(postId).get();
             Member member = memberRepository.findById(memberId).get();
             Comment comment = commentRepository.save(CommentRequestDto.toEntity(commentDto.getContents(), member, post));
-
-            //comment.updateReComment(false);
             return comment.getId();
         }
     }
@@ -63,10 +62,8 @@ public class CommentService {
         } else {
             Post post = postRepository.findById(postId).get();
             Member member = memberRepository.findById(memberId).get();
-            //Comment parent = commentRepository.findCommentById(parentId);
             Comment parent = commentRepository.findCommentById(parentId);
             Comment reComment = commentRepository.save(ReCommentRequestDto.toEntity(commentRequestDto.getContents(), member, post, parent));
-
             reComment.updateReComment(true);
             return reComment.getId();
         }
@@ -109,7 +106,13 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentResponseDto> findCommentsByPostId(Long postId){
         List<Comment> list = commentRepository.findCommentsByPostId(postId);
-        return list.stream().map(CommentResponseDto::new).collect(Collectors.toList());
+        List<Comment> dtoList = new ArrayList<>();
+        for(Comment comment : list) {
+            if (comment.isReComment() == false) {
+                dtoList.add(comment);
+            }
+        }
+        return dtoList.stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 
     //특정 댓글 조회
