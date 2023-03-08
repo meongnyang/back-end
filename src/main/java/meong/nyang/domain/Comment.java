@@ -30,6 +30,7 @@ public class Comment {
     @JoinColumn(name="postId")
     private Post post;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "parentId")
@@ -38,15 +39,19 @@ public class Comment {
 
     private boolean isReComment= false;
 
+    private String nickname;
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "parent")
     private List<Comment> childList = new ArrayList<>();
 
 
     @Builder
-    public Comment(String contents, Member member, Post post, Comment parent) {
+    public Comment(String contents, Member member, Post post, Comment parent, String nickname) {
         this.contents = contents;
         this.member = member;
+        this.nickname = member.getNickname();
         this.post = post;
         this.parent = parent;
     }
