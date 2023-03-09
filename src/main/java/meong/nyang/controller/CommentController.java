@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import meong.nyang.domain.Comment;
 import meong.nyang.dto.*;
 import meong.nyang.service.CommentService;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,13 +71,22 @@ public class CommentController {
     }
     //특정 게시글에 달린 모든 댓글
     @GetMapping("/comments/{postId}")
-    List<CommentResponseDto> findComments(@PathVariable Long postId) {
+    public List<CommentResponseDto> findComments(@PathVariable Long postId) {
             List<CommentResponseDto> responseDtoList = commentService.findCommentsByPostId(postId);
-        for(CommentResponseDto comment: responseDtoList) {
-            if(comment.isReComment() != false){
-
-            }
-        }
         return responseDtoList;
+    }
+
+    //내용으로 댓글Id 찾기
+    @PostMapping("/comments/findId")
+    public ResponseEntity<String> findCommentIdByContents(@PathVariable String contents) throws Exception{
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject value = (JSONObject) jsonParser.parse(contents);
+            Long commentId = commentService.findCommentIdByContents((String) value.get("contents"));
+            String json = "{\"commentId\" : " + commentId + "}";
+            return new ResponseEntity<>(json, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

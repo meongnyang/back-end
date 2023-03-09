@@ -87,7 +87,6 @@ public class MemberService {
     public Long findMemberIdByEmail(String email) throws Exception{
         Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberByEmail(email));
         if (findMember.isEmpty()) {
-            System.out.println(email);
             throw new Exception("회원 정보가 없습니다.");
         } else {
             Member member = memberRepository.findMemberByEmail(email);

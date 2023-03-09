@@ -139,4 +139,16 @@ public class CommentService {
         }
     }
 
+    //댓글 내용으로 댓글Id찾기
+    @Transactional
+    public Long findCommentIdByContents(String contents) throws Exception {
+        Optional<Comment> findComment = Optional.ofNullable(commentRepository.findCommentByContents(contents));
+        if (findComment.isEmpty()) {
+            throw new Exception("댓글 정보가 없습니다.");
+        } else {
+            Comment comment = commentRepository.findCommentByContents(contents);
+            return comment.getId();
+        }
+    }
+
 }
