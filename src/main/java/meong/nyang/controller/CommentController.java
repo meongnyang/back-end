@@ -78,7 +78,7 @@ public class CommentController {
 
     //내용으로 댓글Id 찾기
     @PostMapping("/comments/findId")
-    public ResponseEntity<String> findCommentIdByContents(@PathVariable String contents) throws Exception{
+    public ResponseEntity<String> findCommentIdByContents(@RequestBody String contents) throws Exception{
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject value = (JSONObject) jsonParser.parse(contents);
