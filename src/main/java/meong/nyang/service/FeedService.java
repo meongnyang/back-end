@@ -6,6 +6,7 @@ import meong.nyang.domain.Feed;
 import meong.nyang.domain.FeedEfficacy;
 import meong.nyang.dto.EfficacyResponseDto;
 import meong.nyang.dto.FeedResponseDto;
+import meong.nyang.exception.CustomException;
 import meong.nyang.repository.EfficacyRepository;
 import meong.nyang.repository.FeedEfficactRepository;
 import meong.nyang.repository.FeedRepository;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static meong.nyang.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -56,10 +59,10 @@ public class FeedService {
         return dtoList;
     }
     //특정 사료 정보 가져오기
-    public FeedResponseDto findFeedByFeedId(Long feedId) throws Exception{
+    public FeedResponseDto findFeedByFeedId(Long feedId) {
         Optional<Feed> findFeed = feedRepository.findById(feedId);
         if (findFeed.isEmpty()) {
-            throw new Exception("사료 정보가 존재하지 않습니다.");
+            throw new CustomException(FEED_NOT_FOUND);
         } else {
             Feed feed = feedRepository.findById(feedId).get();
             List<FeedEfficacy> feedEfficacyList = feedEfficactRepository.findAllByFeedId(feedId);
@@ -71,10 +74,10 @@ public class FeedService {
         }
     }
     //특정 효능을 가진 사료 정보 모두 가져오기
-    public List<FeedResponseDto> findFeedByEfficacy(Long efficacyId) throws Exception {
+    public List<FeedResponseDto> findFeedByEfficacy(Long efficacyId) {
         Optional<Efficacy> findEfficacy = efficacyRepository.findById(efficacyId);
         if (findEfficacy.isEmpty()) {
-            throw new Exception("사료 정보가 존재하지 않습니다.");
+            throw new CustomException(FEED_NOT_FOUND);
         } else {
             List<FeedResponseDto> dtoList = new ArrayList<>();
             List<FeedEfficacy> feedEfficacyList = feedEfficactRepository.findAllByEfficacyId(efficacyId);
