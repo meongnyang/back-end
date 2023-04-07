@@ -6,6 +6,7 @@ import meong.nyang.domain.Member;
 import meong.nyang.domain.Record;
 import meong.nyang.dto.RecordRequestDto;
 import meong.nyang.dto.RecordResponseDto;
+import meong.nyang.exception.CustomException;
 import meong.nyang.repository.ConimalRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.RecordRepository;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import static meong.nyang.exception.ErrorCode.*;
 
 @Service
 @Transactional
@@ -26,15 +29,15 @@ public class RecordService {
 
     //건강 기록 등록
     @Transactional
-    public Long createRecord(Long memberId, Long conimalId, RecordRequestDto recordRequestDto) throws Exception {
+    public Long createRecord(Long memberId, Long conimalId, RecordRequestDto recordRequestDto) {
         String nowLocalDate = LocalDateTime.now().plusHours(9).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
         Optional<Record> record = recordRepository.findRecordByCreatedDateAndMemberId(nowLocalDate, memberId);
         Member member = memberRepository.findMemberById(memberId);
         Conimal conimal = conimalRepository.findConimalsById(conimalId);
         if (record.isPresent()) {
-            throw new Exception("이미 오늘 건강 기록을 등록하셨습니다");
+            throw new CustomException(DUPLICATE_RECORD);
         } else {
-            Record new_record = recordRepository.save(recordRequestDto.toEntity(member, conimal, recordRequestDto.getMeal(),
+            Record new_record = recordRepository.save(RecordRequestDto.toEntity(member, conimal, recordRequestDto.getMeal(),
                     recordRequestDto.getVoiding(), recordRequestDto.getVoiding_reason(), recordRequestDto.getExcretion(),
                     recordRequestDto.getExcretion_reason()));
             return new_record.getId();

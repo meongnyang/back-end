@@ -4,6 +4,7 @@ import meong.nyang.domain.Likes;
 import meong.nyang.domain.Member;
 import meong.nyang.domain.Post;
 import meong.nyang.dto.LikesRequestDto;
+import meong.nyang.exception.CustomException;
 import meong.nyang.repository.LikesRepository;
 import meong.nyang.repository.MemberRepository;
 import meong.nyang.repository.PostRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static meong.nyang.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +24,13 @@ public class LikesService {
 
     //좋아요(정보가 있으면 삭제, 정보가 없으면 생성)
     @Transactional
-    public void postLike(Long memberId, Long postId) throws Exception{
+    public void postLike(Long memberId, Long postId) {
         Optional<Member> findMember = memberRepository.findById(memberId);
         Optional<Post> findPost = postRepository.findById(postId);
-        if (findMember.isEmpty() && findPost.isEmpty()) {
-            throw new Exception("회원과 게시글을 찾을 수 없습니다.");
-        } else if (findMember.isEmpty()) {
-            throw new Exception("회원을 찾을 수 없습니다.");
+        if (findMember.isEmpty()) {
+            throw new CustomException(MEMBER_NOT_FOUND);
         } else if (findPost.isEmpty()) {
-            throw new Exception("게시글을 찾을 수 없습니다.");
+            throw new CustomException(POST_NOT_FOUND);
         } else {
             Member member = memberRepository.findById(memberId).get();
             Post post = postRepository.findById(postId).get();

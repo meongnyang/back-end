@@ -16,7 +16,6 @@ public class MyPageController {
 
     @GetMapping("/mypage/{memberId}")
     public MyPageResponseDto getInfo(@PathVariable Long memberId) {
-       MyPageResponseDto responseDto = mypageService.getInfo(memberId);
-       return responseDto;
+        return mypageService.getInfo(memberId);
     }
 }

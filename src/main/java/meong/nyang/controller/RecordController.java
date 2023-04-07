@@ -17,24 +17,21 @@ public class RecordController {
     @PostMapping("/records/{memberId}/{conimalId}")
     public RecordResponseDto createRecord(@PathVariable Long memberId,
                                           @PathVariable Long conimalId,
-                                          @RequestBody RecordRequestDto recordRequestDto) throws Exception {
+                                          @RequestBody RecordRequestDto recordRequestDto) {
         Long recordId = recordService.createRecord(memberId, conimalId, recordRequestDto);
-        RecordResponseDto responseDto = recordService.findRecordByRecordId(recordId);
-        return responseDto;
+        return recordService.findRecordByRecordId(recordId);
     }
 
     @PatchMapping("/records/update/{recordId}")
     public RecordResponseDto upDateRecord(@PathVariable Long recordId,
-                                          @RequestBody RecordRequestDto recordRequestDto) throws Exception  {
+                                          @RequestBody RecordRequestDto recordRequestDto) {
 
         Long updateRecordId = recordService.updateRecord(recordId, recordRequestDto);
-        RecordResponseDto responseDto = recordService.findRecordByRecordId(updateRecordId);
-        return responseDto;
+        return recordService.findRecordByRecordId(updateRecordId);
 
     }
     @GetMapping("/records/{recordId}")
     public RecordResponseDto getRecord(@PathVariable Long recordId) {
-      RecordResponseDto responseDto = recordService.findRecordByRecordId(recordId);
-      return responseDto;
+        return recordService.findRecordByRecordId(recordId);
     }
 }

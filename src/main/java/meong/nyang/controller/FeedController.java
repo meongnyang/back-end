@@ -21,14 +21,12 @@ public class FeedController {
     //사료 정보 모두 가져오기
     @GetMapping("/feed")
     public List<FeedResponseDto> findAllFeed() {
-        List<FeedResponseDto> responseDtoList = feedService.findAllFeed();
-        return responseDtoList;
+        return feedService.findAllFeed();
     }
     //종별로 사료 정보 모두 가져오기
     @GetMapping("/feed/type/{type}")
     public List<FeedResponseDto> findFeedByType(@PathVariable Long type) {
-        List<FeedResponseDto> responseDtoList = feedService.findAllFeedByType(type);
-        return responseDtoList;
+        return feedService.findAllFeedByType(type);
     }
     //특정 사료 정보 가져오기
     @GetMapping("/feed/{feedId}")
@@ -43,17 +41,12 @@ public class FeedController {
     //특정 효능을 가진 사료 정보 모두 가져오기
     @GetMapping("/feed/efficacy/{efficacyId}")
     public ResponseEntity<List<FeedResponseDto>> findFeedByEfficacyId(@PathVariable Long efficacyId) {
-        try {
-            List<FeedResponseDto> responseDtoList = feedService.findFeedByEfficacy(efficacyId);
-            return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        List<FeedResponseDto> responseDtoList = feedService.findFeedByEfficacy(efficacyId);
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
     //모든 효능 정보 가져오기
     @GetMapping("/efficacy")
     public List<EfficacyResponseDto> findAllEfficacy() {
-        List<EfficacyResponseDto> responseDtoList = feedService.findAllEfficacy();
-        return responseDtoList;
+        return feedService.findAllEfficacy();
     }
 }
