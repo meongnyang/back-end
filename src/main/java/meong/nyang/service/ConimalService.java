@@ -37,7 +37,7 @@ public class ConimalService {
             Species species = speciesRepository.findSpeciesByName(conimalRequestDto.getSpeciesName());
             Conimal conimal = conimalRepository.save(ConimalRequestDto.toEntity(conimalRequestDto.getType(), conimalRequestDto.getName(),
                     conimalRequestDto.getGender(), conimalRequestDto.getNeutering(), conimalRequestDto.getBirth(),
-                    conimalRequestDto.getAdopt(),member, species));
+                    conimalRequestDto.getAdopt(),member, species, conimalRequestDto.getCategory()));
             return conimal.getId();
         }
     }

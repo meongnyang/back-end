@@ -21,6 +21,7 @@ public class ConimalResponseDto {
     private Date adopt;
     private Long ddaybirth;
     private Long ddayadopt;
+    private Long category;
 
     public ConimalResponseDto(Conimal conimal) {
         Date now = new Date();
@@ -42,5 +43,6 @@ public class ConimalResponseDto {
         this.adopt = conimal.getAdopt();
         this.ddaybirth = DdayBirth;
         this.ddayadopt = DdayAdopt;
+        this.category = conimal.getCategory();
     }
 }
