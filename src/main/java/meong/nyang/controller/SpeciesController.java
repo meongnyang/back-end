@@ -18,7 +18,6 @@ public class SpeciesController {
 
     @GetMapping("/species/{type}")
     public List<SpeciesResponseDto> findSpeciesByType(@PathVariable Long type) {
-        List<SpeciesResponseDto> responseDtoList = speciesService.findSpeciesByType(type);
-        return responseDtoList;
+        return speciesService.findSpeciesByType(type);
     }
 }
