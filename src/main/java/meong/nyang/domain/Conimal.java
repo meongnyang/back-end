@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class Conimal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +40,16 @@ public class Conimal {
     @JsonIgnore
     @JoinColumn(name="memberId")
     private Member member;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name="speciesId")
     private Species species;
-
     @OneToMany(mappedBy = "conimal", cascade = CascadeType.ALL)
     private List<Record> recordList = new ArrayList<>();
+    private Long category;
 
     @Builder
-    public Conimal(Long type, String name, String gender, Long neutering, Date birth, Date adopt, Member member, Species species) {
+    public Conimal(Long type, String name, String gender, Long neutering, Date birth, Date adopt, Member member, Species species, Long category) {
         this.type = type;
         this.name = name;
         this.gender = gender;
@@ -59,6 +58,7 @@ public class Conimal {
         this.adopt = adopt;
         this.member = member;
         this.species = species;
+        this.category = category;
     }
 
     public void updateType(Long type) {
@@ -86,5 +86,7 @@ public class Conimal {
     public void updateSpecies(Species species) {
         this.species = species;
     }
-
+    public void updateCategory(Long category) {
+        this.category = category;
+    }
 }
