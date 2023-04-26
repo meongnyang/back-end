@@ -176,10 +176,10 @@ public class WalkService {
         JSONObject response = (JSONObject) object.get("response");
         JSONObject body = (JSONObject) response.get("body");
         JSONObject items = (JSONObject) body.get("items");
-        if (items.isEmpty()) {
+        JSONArray item = (JSONArray) items.get("item");
+        if (item.isEmpty()) {
             throw new CustomException(NOT_FOUND_WEATHER);
         }
-        JSONArray item = (JSONArray) items.get("item");
         JSONObject tmp = (JSONObject) item.get(0);
         JSONObject pty = (JSONObject) item.get(6);
         String temperature = (String) tmp.get("fcstValue");
