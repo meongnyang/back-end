@@ -174,12 +174,14 @@ public class WalkService {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(sb.toString());
         JSONObject response = (JSONObject) object.get("response");
+        JSONObject header = (JSONObject) response.get("header");
+        String resultCode = (String) header.get("resultCode");
+        if (!resultCode.equals("00")) {
+            throw new CustomException(NOT_FOUND_WEATHER);
+        }
         JSONObject body = (JSONObject) response.get("body");
         JSONObject items = (JSONObject) body.get("items");
         JSONArray item = (JSONArray) items.get("item");
-        if (item.isEmpty()) {
-            throw new CustomException(NOT_FOUND_WEATHER);
-        }
         JSONObject tmp = (JSONObject) item.get(0);
         JSONObject pty = (JSONObject) item.get(6);
         String temperature = (String) tmp.get("fcstValue");
