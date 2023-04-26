@@ -3,6 +3,7 @@ package meong.nyang.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import meong.nyang.dto.WalkIndexResponseDto;
+import meong.nyang.exception.CustomException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,6 +22,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static meong.nyang.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -173,6 +176,9 @@ public class WalkService {
         JSONObject response = (JSONObject) object.get("response");
         JSONObject body = (JSONObject) response.get("body");
         JSONObject items = (JSONObject) body.get("items");
+        if (items.isEmpty()) {
+            throw new CustomException(NOT_FOUND_WEATHER);
+        }
         JSONArray item = (JSONArray) items.get("item");
         JSONObject tmp = (JSONObject) item.get(0);
         JSONObject pty = (JSONObject) item.get(6);
@@ -216,6 +222,9 @@ public class WalkService {
         JSONObject response = (JSONObject) object.get("response");
         JSONObject body = (JSONObject) response.get("body");
         JSONArray items = (JSONArray) body.get("items");
+        if (items.isEmpty()) {
+            throw new CustomException(NOT_FOUND_FINEDUST);
+        }
         JSONObject weatherInfo = (JSONObject) items.get(districtidx);
         String pm10 = (String) weatherInfo.get("pm10Value");
         String pm25 = (String) weatherInfo.get("pm25Value");

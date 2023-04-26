@@ -27,9 +27,12 @@ public enum ErrorCode {
 
     //record 관련
     NOT_YOUR_CONIMAL(HttpStatus.BAD_REQUEST, "Record-001", "본인 반려동물이 아닙니다."),
-    DUPLICATE_RECORD(HttpStatus.CONFLICT, "Record-002", "오늘의 건강기록을 이미 등록했습니다.")
-    ;
+    DUPLICATE_RECORD(HttpStatus.CONFLICT, "Record-002", "오늘의 건강기록을 이미 등록했습니다."),
 
+    //산책지수 관련
+    NOT_FOUND_WEATHER(HttpStatus.NOT_FOUND, "WalkIndex-001", "날씨 정보를 불러올 수 없습니다."),
+    NOT_FOUND_FINEDUST(HttpStatus.NOT_FOUND, "WalkIndex-002", "미세먼지 지수를 불러올 수 없습니다.")
+    ;
     private final HttpStatus httpStatus;    // HttpStatus
     private final String code;                // ACCOUNT-001
     private final String message;            // 설명
