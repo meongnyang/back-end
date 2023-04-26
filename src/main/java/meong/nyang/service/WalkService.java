@@ -134,12 +134,13 @@ public class WalkService {
         int numOfRows = 100;
         String baseDate = LocalDateTime.now().plusHours(8).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         int baseTime = LocalTime.now().plusHours(8).getHour();
-        if (baseTime <= 2) {
-            baseDate = LocalDateTime.now().plusHours(6).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            baseTime = LocalTime.now().plusHours(6).getHour();
+        if (baseTime < 2) {
+            baseDate = LocalDateTime.now().plusHours(5).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            if (baseTime == 0) baseTime = LocalTime.now().plusHours(7).getHour();
+            else baseTime = LocalTime.now().plusHours(6).getHour();
         }
-        if (baseTime % 3 == 0) baseTime += 2;
-        else if (baseTime % 3 == 1) baseTime += 1;
+        if (baseTime % 3 == 0) baseTime -= 1;
+        else if (baseTime % 3 == 1) baseTime -= 2;
         StringBuilder urlBuilder = new StringBuilder(apiUrl);
         urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=").append(serviceKey); //서비스키
         urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(pageNo), StandardCharsets.UTF_8)); /*페이지번호*/
