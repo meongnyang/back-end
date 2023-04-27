@@ -72,7 +72,8 @@ public class WalkService {
         int walkIndex = 0;
         String[] weather = weatherInfo(nx, ny);
         int temperature = Integer.parseInt(weather[0]);
-        int rainy = Integer.parseInt(weather[1]);
+        int sky = Integer.parseInt(weather[1]);
+        int rainy = Integer.parseInt(weather[2]);
         if (temperature <= -12)
             walkIndex = 5;
         else if (temperature <= -9) {
@@ -115,19 +116,55 @@ public class WalkService {
         } else
             walkIndex = 5;
         if (rainy != 0) walkIndex += 2;
+        HashMap<Integer, String> weatherMap = new HashMap<Integer, String>();
+        weatherMap.put(1, "비");
+        weatherMap.put(3, "눈");
+        weatherMap.put(4, "소나기");
+        HashMap<Integer, String> skyMap = new HashMap<Integer, String>();
+        skyMap.put(1, "맑음");
+        skyMap.put(3, "구름많음");
+        skyMap.put(4, "흐림");
+        String weatherInfo;
+        if (rainy != 0) weatherInfo = weatherMap.get(rainy);
+        else weatherInfo = skyMap.get(sky);
 
         String[] dust = findDust(sidoName, map.get(district));
         int pm10 = Integer.parseInt(dust[0]);
         int pm25 = Integer.parseInt(dust[1]);
         double o3 = Double.parseDouble(dust[2]);
-
         if (pm10 >= 51) walkIndex += 2;
         if (pm25 >= 26) walkIndex += 3;
         if (o3 >= 0.09) walkIndex += 2;
+        String pm10exp;
+        String pm25exp;
+        String o3exp;
+        if (pm10 <= 15) pm10exp = "매우좋음";
+        else if (pm10 <= 30) pm10exp = "좋음";
+        else if (pm10 <= 40) pm10exp = "양호";
+        else if (pm10 <= 50) pm10exp = "보통";
+        else if (pm10 <= 75) pm10exp = "나쁨";
+        else if (pm10 <= 100) pm10exp = "상당히 나쁨";
+        else if (pm10 <= 150) pm10exp = "매우 나쁨";
+        else pm10exp = "최악";
+        if (pm25 <= 8) pm25exp = "매우좋음";
+        else if (pm25 <= 15) pm25exp = "좋음";
+        else if (pm25 <= 20) pm25exp = "양호";
+        else if (pm25 <= 25) pm25exp = "보통";
+        else if (pm25 <= 37) pm25exp = "나쁨";
+        else if (pm25 <= 50) pm25exp = "상당히 나쁨";
+        else if (pm25 <= 75) pm25exp = "매우 나쁨";
+        else pm25exp = "최악";
+        if (o3 <= 0.02) o3exp = "매우좋음";
+        else if (o3 <= 0.03) o3exp = "좋음";
+        else if (o3 <= 0.06) o3exp = "양호";
+        else if (o3 <= 0.09) o3exp = "보통";
+        else if (o3 <= 0.12) o3exp = "나쁨";
+        else if (o3 <= 0.15) o3exp = "상당히 나쁨";
+        else if (o3 <= 0.38) o3exp = "매우 나쁨";
+        else o3exp = "최악";
 
         if (walkIndex > 5) walkIndex = 5;
-
-        return new WalkIndexResponseDto(indexmap.get(walkIndex), walkmap.get(indexmap.get(walkIndex)), temperature, o3, pm10, pm25);
+        return new WalkIndexResponseDto(indexmap.get(walkIndex), walkmap.get(indexmap.get(walkIndex)), temperature, o3, pm10, pm25, o3exp, pm10exp, pm25exp, weatherInfo);
     }
     public String[] weatherInfo(String nx, String ny) throws IOException, ParseException {
         String apiUrl = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
@@ -183,10 +220,12 @@ public class WalkService {
         JSONObject items = (JSONObject) body.get("items");
         JSONArray item = (JSONArray) items.get("item");
         JSONObject tmp = (JSONObject) item.get(0);
+        JSONObject cloud = (JSONObject) item.get(5);
         JSONObject pty = (JSONObject) item.get(6);
         String temperature = (String) tmp.get("fcstValue");
+        String sky = (String) cloud.get("fcstValue");
         String weather = (String) pty.get("fcstValue");
-        return new String[] {temperature, weather};
+        return new String[] {temperature, sky, weather};
     }
 
     public String[] findDust(String sidoName, Integer districtidx) throws IOException, ParseException {
