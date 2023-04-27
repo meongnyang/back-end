@@ -155,7 +155,6 @@ public class WalkService {
         urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(ny, StandardCharsets.UTF_8)); //위도
 
         URL url = new URL(urlBuilder.toString());
-        log.info(String.valueOf(url));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
