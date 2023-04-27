@@ -135,12 +135,12 @@ public class WalkService {
         String type = "JSON";
         int pageNo = 1;
         int numOfRows = 100;
-        String baseDate = LocalDateTime.now().plusHours(8).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        int baseTime = LocalTime.now().plusHours(8).getHour();
+        String baseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        int baseTime = LocalTime.now().getHour();
         if (baseTime < 2) {
-            baseDate = LocalDateTime.now().plusHours(5).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            if (baseTime == 0) baseTime = LocalTime.now().plusHours(7).getHour();
-            else baseTime = LocalTime.now().plusHours(6).getHour();
+            baseDate = LocalDateTime.now().plusHours(-3).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            if (baseTime == 0) baseTime = LocalTime.now().plusHours(-1).getHour();
+            else baseTime = LocalTime.now().plusHours(-2).getHour();
         }
         if (baseTime % 3 == 0) baseTime -= 1;
         else if (baseTime % 3 == 1) baseTime -= 2;
