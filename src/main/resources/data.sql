@@ -473,7 +473,7 @@ INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(3, '만성화
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(4, '살균치료, 항생제 투여, 피부 영양제 급여가 필요하며, 감염의 원인이 된 세균이 항생제에 대한 저항력이 높은 균이거나 중증의 농피증 상태라면 외과적 수술이 필요할 수도 있습니다.', '농포, 여드름', '필요 이상의 잦은 목욕과 영양부족, 약물의 과다 투여, 맞지 않는 샴푸로 인해 발병할 수 있습니다.', 1);
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(5, '하루빨리 내원을 해서 검사를 받고 치료를 받는 것을 추천드립니다.', '미란, 궤양', '모낭충 방치, 영양소 결핍, 피부병 방치 등 원인은 아주 많습니다.', 1);
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(6, '수술로 제거하는 것이 좋으며, 너무 커지면 수술이 어려워 질 수도있으니 하루빨리 내원을 해서 검사를 받아야합니다.', '결절, 종괴', '노령견에 생길 가능성이 높으며, 과체중으로 인해 생길 수도 있고, 환경적인 원인으로 인해 발병할 수도 있습니다.', 1);
-INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(7, '앞으로도 피부병 예방에 힘써주세요!', '피부명무증상', '별다른 증상이 보이지 않습니다', 1);
+INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(7, '앞으로도 피부병 예방에 힘써주세요!', '피부병무증상', '별다른 증상이 보이지 않습니다', 1);
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(8, '항상 주위의 환경을 청결하게 해줘야 하며, 강아지 눈에 자극이 될 만한 것이 들어가지 않도록 주의해야 합니다.', '결막염', '박테리아, 바이러스, 알레르기, 안구 건조, 외상이나 환경적 원인, 기생충 감염, 면역질환 등의 원인으로 인해 발병할 수 있습니다.', 1);
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(9, '샴푸가 눈에 안들어가게 조심해야하며, 발병한 경우 동물병원에 내원을 해서 처방받은 안약을 잘 넣어줘야합니다.', '궤양성각막질환', '눈 표면에 흠집이 나는 외상으로 인해 발병할 수 있습니다.', 1);
 INSERT INTO disease(DISEASE_ID, MANAGE, NAME, REASON, TYPE) VALUES(10, '수술 외에는 치료법이 없으므로, 동물병원에 내원을 해서 검사를 받아야합니다.', '백내장', '주로 노령견에게 발생하며 노화, 유전, 당뇨 등이 주원인 입니다.', 1);
