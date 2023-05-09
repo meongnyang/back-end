@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Builder
 @Table(name="member")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
 @DynamicInsert
 //@ToString(exclude = "conimal")
@@ -114,5 +114,4 @@ public class Member {
     public void updateReport(Long reportCount) {
         this.reportCount = reportCount;
     }
-
 }

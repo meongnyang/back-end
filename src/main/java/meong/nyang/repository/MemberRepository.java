@@ -13,10 +13,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findMemberByEmail(String email);
     Member findMemberById(Long id);
-    Optional<Member> findMemberByNickname(String nickname);
+    Member findMemberByNickname(String nickname);
 
     @EntityGraph(attributePaths = "authorities")
     Optional<Object> findOneWithAuthoritiesByEmail(String email);
 
-    Optional<Member> findByEmail(String email);
+    Member findByEmail(String email);
 }
