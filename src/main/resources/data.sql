@@ -668,3 +668,5 @@ INSERT INTO feed_efficacy(feed_efficacy_ID, FEED_ID, EFFICACY_ID) VALUES(127,51,
 INSERT INTO feed_efficacy(feed_efficacy_ID, FEED_ID, EFFICACY_ID) VALUES(128,52,1);
 INSERT INTO feed_efficacy(feed_efficacy_ID, FEED_ID, EFFICACY_ID) VALUES(129,52,7);
 INSERT INTO feed_efficacy(feed_efficacy_ID, FEED_ID, EFFICACY_ID) VALUES(130,52,4);
+INSERT INTO authority(authority_name) VALUES("ROLE_ADMIN");
+INSERT INTO authority(authority_name) VALUES("ROLE_USER");
