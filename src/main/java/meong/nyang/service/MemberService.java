@@ -41,7 +41,7 @@ public class MemberService {
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Transactional
-    public Long signUp(MemberRequestDto memberRequestDto) {
+    public LoginDto signUp(MemberRequestDto memberRequestDto) {
         Optional<Member> findMember = Optional.ofNullable(memberRepository.findMemberByEmail(memberRequestDto.getEmail()));
         if (findMember.isPresent()) {
             throw new CustomException(DUPLICATE_MEMBER);
@@ -59,7 +59,8 @@ public class MemberService {
                 .activated(true)
                 .build();
         memberRequestDto.from(memberRepository.save(member));
-        return member.getId();
+
+        return new LoginDto(member.getEmail(), member.getNickname());
     }
 
     @Transactional

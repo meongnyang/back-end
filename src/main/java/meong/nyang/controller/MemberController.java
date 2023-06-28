@@ -22,10 +22,10 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     @PostMapping("/members")
-    public ResponseEntity<MemberResponseDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
-        Long memberId = memberService.signUp(memberRequestDto);
-        MemberResponseDto responseDto = memberService.findMemberByMemberId(memberId);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<LoginResponseDto> userSignUp(@RequestBody MemberRequestDto memberRequestDto) throws Exception {
+        LoginDto loginDto = memberService.signUp(memberRequestDto);
+        LoginResponseDto login = memberService.login(loginDto);
+        return new ResponseEntity<>(login, HttpStatus.CREATED);
     }
 
 
