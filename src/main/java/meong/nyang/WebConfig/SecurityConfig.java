@@ -76,6 +76,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/members").permitAll()
+                .antMatchers("/members/findId").permitAll()
                 .antMatchers("/members/login").permitAll()
                 .antMatchers("/admin").permitAll()
                 .antMatchers("/admin/login").permitAll()
