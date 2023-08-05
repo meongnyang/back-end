@@ -32,7 +32,7 @@ import static meong.nyang.exception.ErrorCode.*;
 @Slf4j
 public class WalkService {
     private final StationRepository stationRepository;
-    public WalkIndexResponseDto walkIndex(String nx, String ny, String category) throws IOException, ParseException {
+    public WalkIndexResponseDto walkIndex(double latitude, double longitude, String category) throws IOException, ParseException {
         HashMap<Integer, String> indexmap = new HashMap<>();
         indexmap.put(1, "아주 좋음");
         indexmap.put(2, "좋음");
@@ -47,7 +47,7 @@ public class WalkService {
         walkmap.put("아주 나쁨", "반려견의 건강을 위해 장시간 산책은 피하세요!");
 
         int walkIndex = 0;
-        String[] weather = weatherInfo(nx, ny);
+        String[] weather = weatherInfo((long)latitude, (long)longitude);
         int temperature = Integer.parseInt(weather[0]);
         int sky = Integer.parseInt(weather[1]);
         int rainy = Integer.parseInt(weather[2]);
@@ -60,38 +60,41 @@ public class WalkService {
             if (Objects.equals(category, "소형견")) walkIndex = 5;
             else if (Objects.equals(category, "중형견")) walkIndex = 4;
             else walkIndex = 3;
-        } else if (temperature <= -4) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 4;
-            else walkIndex = 3;
-        } else if (temperature <= 1)
-            walkIndex = 3;
-        else if (temperature <= 4) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 3;
-            else walkIndex = 2;
-        } else if (temperature <= 7) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 2;
-            else walkIndex = 1;
-        } else if (temperature <= 10) {
-            if (Objects.equals(category, "소형견")) walkIndex = 2;
-            else walkIndex = 1;
-        } else if (temperature <= 15) {
-            walkIndex = 1;
-        } else if (temperature <= 18) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 1;
-            else walkIndex = 2;
-        } else if (temperature <= 21) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 2;
-            else walkIndex = 3;
-        } else if (temperature <= 23) {
-            walkIndex = 3;
-        } else if (temperature <= 26) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 3;
-            else walkIndex = 4;
-        } else if (temperature <= 29) {
-            if (Objects.equals(category, "소형견") | Objects.equals(category, "중형견")) walkIndex = 4;
-            else walkIndex = 5;
-        } else
-            walkIndex = 5;
+        } else {
+            boolean size = Objects.equals(category, "소형견") | Objects.equals(category, "중형견");
+            if (temperature <= -4) {
+                if (size) walkIndex = 4;
+                else walkIndex = 3;
+            } else if (temperature <= 1)
+                walkIndex = 3;
+            else if (temperature <= 4) {
+                if (size) walkIndex = 3;
+                else walkIndex = 2;
+            } else if (temperature <= 7) {
+                if (size) walkIndex = 2;
+                else walkIndex = 1;
+            } else if (temperature <= 10) {
+                if (Objects.equals(category, "소형견")) walkIndex = 2;
+                else walkIndex = 1;
+            } else if (temperature <= 15) {
+                walkIndex = 1;
+            } else if (temperature <= 18) {
+                if (size) walkIndex = 1;
+                else walkIndex = 2;
+            } else if (temperature <= 21) {
+                if (size) walkIndex = 2;
+                else walkIndex = 3;
+            } else if (temperature <= 23) {
+                walkIndex = 3;
+            } else if (temperature <= 26) {
+                if (size) walkIndex = 3;
+                else walkIndex = 4;
+            } else if (temperature <= 29) {
+                if (size) walkIndex = 4;
+                else walkIndex = 5;
+            } else
+                walkIndex = 5;
+        }
         if (rainy != 0) walkIndex += 2;
         HashMap<Integer, String> weatherMap = new HashMap<Integer, String>();
         weatherMap.put(1, "비");
@@ -105,7 +108,7 @@ public class WalkService {
         if (rainy != 0) weatherInfo = weatherMap.get(rainy);
         else weatherInfo = skyMap.get(sky);
 
-        String[] dust = findDust(Double.parseDouble(nx), Double.parseDouble(ny));
+        String[] dust = findDust(latitude, longitude);
         int pm10 = Integer.parseInt(dust[0]);
         int pm25 = Integer.parseInt(dust[1]);
         double o3 = Double.parseDouble(dust[2]);
@@ -143,7 +146,7 @@ public class WalkService {
         if (walkIndex > 5) walkIndex = 5;
         return new WalkIndexResponseDto(indexmap.get(walkIndex), walkmap.get(indexmap.get(walkIndex)), temperature, o3, pm10, pm25, o3exp, pm10exp, pm25exp, weatherInfo);
     }
-    public String[] weatherInfo(String nx, String ny) throws IOException, ParseException {
+    public String[] weatherInfo(Long nx, Long ny) throws IOException, ParseException {
         String apiUrl = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
         String serviceKey = "6d0gcj819%2FE2tUb8OWd5yJZVaneyb%2B%2FeTDjbY74rAdWmyYzAEcwss0HHDEaHoAaeqYRbEHJDTMBxcVQ0pk6ctQ%3D%3D";
         String type = "JSON";
@@ -165,8 +168,8 @@ public class WalkService {
         urlBuilder.append("&").append(URLEncoder.encode("dataType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(type, StandardCharsets.UTF_8));
         urlBuilder.append("&").append(URLEncoder.encode("base_date", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(baseDate, StandardCharsets.UTF_8)); /* 조회하고싶은 날짜*/
         urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(baseTime)+"00", StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(nx, StandardCharsets.UTF_8)); //경도
-        urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(ny, StandardCharsets.UTF_8)); //위도
+        urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(nx.toString(), StandardCharsets.UTF_8)); //경도
+        urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(ny.toString(), StandardCharsets.UTF_8)); //위도
 
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -205,8 +208,8 @@ public class WalkService {
         return new String[] {temperature, sky, weather};
     }
 
-    public String[] findDust(Double nx, Double ny) throws IOException, ParseException {
-        String station = stationRepository.findStationByLocation(nx, ny);
+    public String[] findDust(Double latitude, Double longitude) throws IOException, ParseException {
+        String station = stationRepository.findStationByLocation(latitude, longitude);
         String apiUrl = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty";
         String serviceKey = "6d0gcj819%2FE2tUb8OWd5yJZVaneyb%2B%2FeTDjbY74rAdWmyYzAEcwss0HHDEaHoAaeqYRbEHJDTMBxcVQ0pk6ctQ%3D%3D";
         String returnType = "json";
