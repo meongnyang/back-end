@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

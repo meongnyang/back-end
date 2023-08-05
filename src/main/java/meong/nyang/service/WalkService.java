@@ -2,8 +2,10 @@ package meong.nyang.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import meong.nyang.domain.Station;
 import meong.nyang.dto.WalkIndexResponseDto;
 import meong.nyang.exception.CustomException;
+import meong.nyang.repository.StationRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,33 +31,8 @@ import static meong.nyang.exception.ErrorCode.*;
 @RequiredArgsConstructor
 @Slf4j
 public class WalkService {
-    public WalkIndexResponseDto walkIndex(String nx, String ny, String category, String sidoName, String district) throws IOException, ParseException {
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("중구", 0);
-        map.put("종로구", 2);
-        map.put("용산구", 5);
-        map.put("광진구", 6);
-        map.put("성동구", 7);
-        map.put("중랑구", 9);
-        map.put("동대문구", 10);
-        map.put("성북구", 12);
-        map.put("도봉구", 14);
-        map.put("은평구", 15);
-        map.put("서대문구", 16);
-        map.put("마포구", 17);
-        map.put("강서구", 19);
-        map.put("구로구", 21);
-        map.put("영등포구", 22);
-        map.put("동작구", 24);
-        map.put("관악구", 26);
-        map.put("강남구", 27);
-        map.put("서초구", 28);
-        map.put("송파구", 31);
-        map.put("강동구", 32);
-        map.put("금천구", 34);
-        map.put("강북구", 36);
-        map.put("양천구", 37);
-        map.put("노원구", 38);
+    private final StationRepository stationRepository;
+    public WalkIndexResponseDto walkIndex(String nx, String ny, String category) throws IOException, ParseException {
         HashMap<Integer, String> indexmap = new HashMap<>();
         indexmap.put(1, "아주 좋음");
         indexmap.put(2, "좋음");
@@ -128,7 +105,7 @@ public class WalkService {
         if (rainy != 0) weatherInfo = weatherMap.get(rainy);
         else weatherInfo = skyMap.get(sky);
 
-        String[] dust = findDust(sidoName, map.get(district));
+        String[] dust = findDust(Double.parseDouble(nx), Double.parseDouble(ny));
         int pm10 = Integer.parseInt(dust[0]);
         int pm25 = Integer.parseInt(dust[1]);
         double o3 = Double.parseDouble(dust[2]);
@@ -228,17 +205,19 @@ public class WalkService {
         return new String[] {temperature, sky, weather};
     }
 
-    public String[] findDust(String sidoName, Integer districtidx) throws IOException, ParseException {
-        String apiUrl = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
+    public String[] findDust(Double nx, Double ny) throws IOException, ParseException {
+        String station = stationRepository.findStationByLocation(nx, ny);
+        String apiUrl = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty";
         String serviceKey = "6d0gcj819%2FE2tUb8OWd5yJZVaneyb%2B%2FeTDjbY74rAdWmyYzAEcwss0HHDEaHoAaeqYRbEHJDTMBxcVQ0pk6ctQ%3D%3D";
         String returnType = "json";
         double ver = 1.3;
         StringBuilder urlBuilder = new StringBuilder(apiUrl);
         urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=").append(serviceKey); //서비스키
         urlBuilder.append("&").append(URLEncoder.encode("returnType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(returnType, StandardCharsets.UTF_8)); //반환 타입
-        urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("100", StandardCharsets.UTF_8)); /*한 페이지 결과 수*/
+        urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8)); /*한 페이지 결과 수*/
         urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8)); //페이지 번호
-        urlBuilder.append("&").append(URLEncoder.encode("sidoName", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(sidoName, StandardCharsets.UTF_8)); //시 이름
+        urlBuilder.append("&").append(URLEncoder.encode("stationName", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(station, StandardCharsets.UTF_8)); //시 이름
+        urlBuilder.append("&").append(URLEncoder.encode("dataTerm", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("DAILY", StandardCharsets.UTF_8)); //시 이름
         urlBuilder.append("&").append(URLEncoder.encode("ver", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(ver), StandardCharsets.UTF_8)); //버전 정보
 
         URL url = new URL(urlBuilder.toString());
@@ -266,7 +245,7 @@ public class WalkService {
         if (items.isEmpty()) {
             throw new CustomException(NOT_FOUND_FINEDUST);
         }
-        JSONObject weatherInfo = (JSONObject) items.get(districtidx);
+        JSONObject weatherInfo = (JSONObject) items.get(0);
         String pm10 = (String) weatherInfo.get("pm10Value");
         String pm25 = (String) weatherInfo.get("pm25Value");
         String o3 = (String) weatherInfo.get("o3Value");

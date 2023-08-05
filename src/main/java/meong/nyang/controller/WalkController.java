@@ -24,7 +24,7 @@ public class WalkController {
         map.put(1, "소형견");
         map.put(2, "중형견");
         map.put(3, "대형견");
-        WalkIndexResponseDto responseDto = walkService.walkIndex(walkRequestDto.getNx(), walkRequestDto.getNy(), map.get(category), walkRequestDto.getCity(), walkRequestDto.getDistrict());
+        WalkIndexResponseDto responseDto = walkService.walkIndex(walkRequestDto.getNx(), walkRequestDto.getNy(), map.get(category));
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

@@ -9,6 +9,4 @@ public class WalkRequestDto {
     String nx;
     String ny;
     String category;
-    String city;
-    String district;
 }

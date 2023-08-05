@@ -1,37 +1,27 @@
 package meong.nyang.domain;
 
-import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class Species {
+public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "speciesId")
+    @Column(name = "stationId")
     private Long id;
-
-    @NotNull
-    private Long type;
-
-    @NotNull
+    private Double x;
+    private Double y;
     private String name;
-
-    @OneToMany(mappedBy = "species", cascade = CascadeType.ALL)
-    private List<Conimal> conimals = new ArrayList<>();
-
     @Builder
-    public Species(Long type, String name) {
-        this.type = type;
+    public Station(Double x, Double y, String name) {
+        this.x = x;
+        this.y = y;
         this.name = name;
     }
-
 }
