@@ -15,13 +15,13 @@ public class Station {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stationId")
     private Long id;
-    private Double x;
-    private Double y;
+    private Double longitude;
+    private Double latitude;
     private String name;
     @Builder
-    public Station(Double x, Double y, String name) {
-        this.x = x;
-        this.y = y;
+    public Station(Double longitude, Double latitude, String name) {
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.name = name;
     }
 }

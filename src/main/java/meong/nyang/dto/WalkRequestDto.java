@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class WalkRequestDto {
-    String nx;
-    String ny;
+    double longitude;
+    double latitude;
     String category;
 }
